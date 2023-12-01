@@ -1,15 +1,16 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Button from '@mui/material/Button';
+import Navbar from "./components/Navbar/Navbar";
 
 function App() {
   return (
     <div className="App">
+      <Navbar />
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          Edit <code>src/App.tsx</code> and save.
         </p>
+        <Button variant="outlined">Testing</Button>
         <a
           className="App-link"
           href="https://reactjs.org"

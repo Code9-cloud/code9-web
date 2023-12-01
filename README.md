@@ -1,3 +1,9 @@
+# TODO
+
+1. Dynamic Title, use application name along with Code 9.
+2. Animated logo of Code 9.
+3. Dynamic art for application icon.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
