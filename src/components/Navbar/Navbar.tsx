@@ -15,8 +15,10 @@ import logo from '../../Code9logo_white.png';
 import CustomTab from "../CustomTab/CustomTab";
 import CustomTabs from "../CustomTab/CustomTabs";
 import {Reply } from "@mui/icons-material";
+import {GlobalContext} from "../../GlobalContext";
 
 const Navbar = () => {
+    const {signOut} = React.useContext(GlobalContext);
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -28,6 +30,11 @@ const Navbar = () => {
         setAnchorEl(event.currentTarget);
     };
 
+    const handleSignout = () => {
+        handleClose();
+        signOut();
+    }
+
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -37,28 +44,28 @@ const Navbar = () => {
             <Toolbar style={{ position: 'relative' }}>
                 {/* Left Side - Logo and Names */}
                 <div style={{ display: 'flex', alignItems: 'center', flex: 1, marginRight: 'auto' }}>
-                    <IconButton edge="start" color="inherit" aria-label="logo">
+                    <IconButton edge="start" color="inherit" aria-label="logo" disableRipple={true}>
                         <img src={logo} alt="Code9 Logo" height="40px" />
                     </IconButton>
                 </div>
 
                 {/* Center - Tab Group */}
-                <CustomTabs
-                    value={selectedTab}
-                    onChange={handleTabChange}
-                    style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}
-                >
-                    <CustomTab label={"Entities"} />
-                    <CustomTab icon={"Workflows"} />
-                    {/* More Tabs */}
-                </CustomTabs>
+                {/*<CustomTabs*/}
+                {/*    value={selectedTab}*/}
+                {/*    onChange={handleTabChange}*/}
+                {/*    style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}*/}
+                {/*>*/}
+                {/*    <CustomTab label={"Entities"} />*/}
+                {/*    <CustomTab icon={"Workflows"} />*/}
+                {/*    /!* More Tabs *!/*/}
+                {/*</CustomTabs>*/}
 
                 {/* Right Side - Switch and User Menu */}
                 <div style={{ marginLeft: 'auto' }}>
                     {/*<Switch /> /!* Customize as needed *!/*/}
-                    <Button variant="outlined" startIcon={<Reply />}>
-                        Switch to Product View
-                    </Button>
+                    {/*<Button variant="outlined" startIcon={<Reply />}>*/}
+                    {/*    Switch to Product View*/}
+                    {/*</Button>*/}
                     <Button onClick={handleMenu}>
                         <Avatar alt="User Name" src="/static/avatar.jpeg" />
                     </Button>
@@ -68,7 +75,7 @@ const Navbar = () => {
                         onClose={handleClose}
                     >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                        <MenuItem onClick={handleSignout}>Logout</MenuItem>
                         {/* More items */}
                     </Menu>
                 </div>

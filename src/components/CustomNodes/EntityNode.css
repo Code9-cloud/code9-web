@@ -1,0 +1,36 @@
+.entity-node {
+    min-width: 150px;
+    min-height: 50px;
+    border-radius: 5px;
+    background: #12111C;
+}
+
+.entity-node label {
+    display: block;
+    color: #777;
+    font-size: 8px;
+}
+
+.entity-node__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #353355;
+    border-top-right-radius: inherit;
+    border-top-left-radius: inherit;
+    font-size: small;
+    /*margin-bottom: 5px;*/
+}
+
+.entity-node__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #12111C;
+    border-top: 1px solid #2B2B38;
+}
+
+.entity-node__item_container {
+    background: #12111C;
+    border-radius: inherit;
+}
