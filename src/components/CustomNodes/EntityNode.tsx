@@ -6,6 +6,15 @@ import EntityAttribute from "./EntityAttribute";
 
 const handleStyle = { left: 10 };
 
+function EntityNodeHeader({ data } : any) {
+    return (
+        <div className="entity-node__header">
+            <Typography variant={"body1"}>{data.entity_name}</Typography>
+            <Handle type={'source'} position={Position.Right} id={data.entity_name+'-src'} style={{visibility: 'hidden'}}/>
+        </div>
+    );
+}
+
 function EntityNode({ data } : any) {
     const onChange = useCallback((evt: any) => {
         console.log(evt.target.value);
@@ -13,11 +22,12 @@ function EntityNode({ data } : any) {
 
     return (
         <div className="entity-node">
-            <div className="entity-node__header">
-                <Typography variant={"body1"}>{data.entity_name}</Typography>
-            </div>
+            <EntityNodeHeader data={data} />
+            {/*<div className="entity-node__header">*/}
+            {/*    <Typography variant={"body1"}>{data.entity_name}</Typography>*/}
+            {/*    <Handle type={'source'} position={Position.Right} id={data.entity_name+'-src'} style={{visibility: 'hidden'}}/>*/}
+            {/*</div>*/}
             <div className="entity-node__item_container">
-                <Handle type={'source'} position={Position.Right} id={data.entity_name+'-src'} style={{display: 'hidden'}}/>
                 { data.attributes.map((attribute: any) => (
                     <EntityAttribute key={attribute.name} data={attribute} />
                     // <div className="entity-node__item">
