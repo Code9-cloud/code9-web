@@ -19,3 +19,9 @@ Organisation
     status: active | inactive | onboarding_pending
 CodeBase
     status: loading | loaded
+
+
+Keep Entity & Methods In global context under application
+Selected Entity Id
+IsEditing Entity Sidebar
+IsEntitySidebarOpen

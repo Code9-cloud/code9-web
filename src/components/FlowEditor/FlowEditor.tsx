@@ -25,7 +25,6 @@ const minimapStyle = {
 };
 
 const FlowEditor = () => {
-    const reactFlowWrapper = useRef<HTMLDivElement>(null);
     const proOptions = { hideAttribution: true };
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -58,30 +57,28 @@ const FlowEditor = () => {
     const onPaneContextMenu = (event: any) => {
         event.preventDefault();
 
-        if (!reactFlowInstance || !reactFlowWrapper.current) return;
+        if (!reactFlowInstance) return;
 
-        const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-
-        const relativePositionX = event.clientX - reactFlowBounds.left;
-        const relativePositionY = event.clientY - reactFlowBounds.top;
-
-        const viewportPoint = reactFlowInstance.project({
-            x: relativePositionX,
-            y: relativePositionY,
-        });
+        const viewportPoint = reactFlowInstance.screenToFlowPosition({ x: event.clientX, y: event.clientY});
 
         const newNode = {
-            id: Date.now().toString(), // or any unique ID
+            id: 'context-menu', // or any unique ID
             data: { label: 'New Node' },
             position: viewportPoint,
             // other node properties
         };
 
-        setNodes((nds) => nds.concat(newNode));
+        setNodes((nds) => {
+            let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
+            if(idx > -1) {
+                nds.splice(idx, 1);
+            }
+            return nds.concat(newNode);
+        });
     };
 
     return (
-        <div ref={reactFlowWrapper} style={{width: '100%', height: '100%'}}>
+        <div style={{width: '100%', height: '100%'}}>
             <ReactFlow
                 style={flowStyle}
                 nodes={nodes}
