@@ -5,7 +5,7 @@ import ReactFlow, {
     Controls,
     Background,
     useNodesState,
-    useEdgesState, ReactFlowInstance, Node,
+    useEdgesState, ReactFlowInstance, Node, Panel,
 } from 'reactflow';
 
 import EntityNode from '../CustomNodes/EntityNode';
@@ -15,6 +15,7 @@ import './EntitiesEditor.css';
 import {GlobalContext} from "../../GlobalContext";
 import EntitySidebar from "../EntitySidebar/EntitySidebar";
 import {KeyboardDoubleArrowLeft, KeyboardDoubleArrowRight} from "@mui/icons-material";
+import {Button} from "@mui/material";
 
 const nodeTypes = {
     entityNode: EntityNode,
@@ -46,7 +47,7 @@ const EntitiesEditor = () => {
     const [loaded, setLoaded] = useState(false);
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [sidebarWidth, setSidebarWidth] = useState(300);
-    const [isResizing, setIsResizing] = useState(false);
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
     const minSidebarWidth = 300;
     const maxSidebarWidth = 1200;
 
@@ -57,7 +58,6 @@ const EntitiesEditor = () => {
     const onResizeStart = (event: any) => {
         document.addEventListener('mousemove', onResizeMove);
         document.addEventListener('mouseup', onResizeStop);
-        setIsResizing(true);
     }
 
     const onResizeMove = (event: any) => {
@@ -71,7 +71,6 @@ const EntitiesEditor = () => {
     const onResizeStop = (event: any) => {
         document.removeEventListener('mousemove', onResizeMove);
         document.removeEventListener('mouseup', onResizeStop);
-        setIsResizing(false);
     }
 
     const [selectedEntity, setSelectedEntity] = useState<string | null>(null);
@@ -82,8 +81,18 @@ const EntitiesEditor = () => {
         }
     }
 
+    const closeContextMenu = () => {
+        console.log('close context menu');
+        setNodes((nds) => {
+            return nds.filter((nd) => { return nd.id !== 'context-menu' });
+        });
+        setIsContextMenuOpen(false);
+    }
+
     const onPaneClick = (event: any) => {
-        if(selectedEntity !== null) {
+        if(isContextMenuOpen) {
+            closeContextMenu();
+        } else if(selectedEntity !== null) {
             unselectEntity();
         }
     }
@@ -166,6 +175,10 @@ const EntitiesEditor = () => {
 
         if (!reactFlowInstance) return;
 
+        if(!isContextMenuOpen) {
+            setIsContextMenuOpen(true);
+        }
+
         const viewportPoint = reactFlowInstance.screenToFlowPosition({ x: event.clientX, y: event.clientY});
 
         const newNode = {
@@ -211,6 +224,9 @@ const EntitiesEditor = () => {
                         <MiniMap style={minimapStyle} zoomable pannable/>
                         <Controls/>
                         <Background color="#2B2B38" gap={16} size={3}/>
+                        {/*<Panel position={'top-right'} style={{right: 30}}>*/}
+                        {/*    <Button>Create Entity</Button>*/}
+                        {/*</Panel>*/}
                     </ReactFlow>
                     <div className="floatingButton" onClick={toggleSidebar}>
                         { isSidebarCollapsed ? <KeyboardDoubleArrowLeft style={{backgroundColor: '#353355'}} /> : <KeyboardDoubleArrowRight style={{backgroundColor: '#353355'}} /> }
