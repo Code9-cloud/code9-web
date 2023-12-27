@@ -25,3 +25,10 @@ Keep Entity & Methods In global context under application
 Selected Entity Id
 IsEditing Entity Sidebar
 IsEntitySidebarOpen
+
+Create a loading screen while app is being loaded in frontend.
+
+Tasks
+1. Entity Sidebar
+2. Create Entity Flow
+3. Edit Entity Flow
