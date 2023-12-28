@@ -36,6 +36,7 @@ type GlobalContextType = {
     setSection: (section: string) => void;
     application: ApplicationType | null;
     loadApplication: () => void;
+    addEntityToApplication: (entity: EntityType) => void;
 };
 
 export const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType);
@@ -133,8 +134,16 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
         });
     }
 
+    const addEntityToApplication = (entity: EntityType) => {
+        setApplication((app) => {
+            if (!app) return app;
+            app.entities[entity.id] = entity;
+            return app;
+        });
+    }
+
     return (
-        <GlobalContext.Provider value={{ user, signIn, signOut, currentSection, setSection, application, loadApplication }}>
+        <GlobalContext.Provider value={{ user, signIn, signOut, currentSection, setSection, application, loadApplication, addEntityToApplication}}>
             {children}
         </GlobalContext.Provider>
     );

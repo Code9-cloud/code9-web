@@ -14,11 +14,14 @@ import 'reactflow/dist/style.css';
 import './EntitiesEditor.css';
 import {GlobalContext} from "../../GlobalContext";
 import EntitySidebar from "../EntitySidebar/EntitySidebar";
-import {KeyboardDoubleArrowLeft, KeyboardDoubleArrowRight} from "@mui/icons-material";
+import {KeyboardDoubleArrowLeft, KeyboardDoubleArrowRight, LibraryAdd} from "@mui/icons-material";
 import {Button} from "@mui/material";
+import ContextMenuNode from "../CustomNodes/ContextMenuNode";
+import ModalCreateEntity from "../ModalCreateEntity/ModalCreateEntity";
 
 const nodeTypes = {
     entityNode: EntityNode,
+    contextMenuNode: ContextMenuNode,
 };
 
 const minimapStyle = {
@@ -29,7 +32,7 @@ const minimapStyle = {
 const EntitiesEditor = () => {
     const proOptions = { hideAttribution: true };
     const entityEditorRef : React.MutableRefObject<HTMLDivElement | null> = useRef(null);
-    const {application, loadApplication} = React.useContext(GlobalContext);
+    const {application, loadApplication, addEntityToApplication} = React.useContext(GlobalContext);
     const initNodes : Node[] = application?.entities ? Object.values(application.entities).map((entity) => { return { id: 'entity_' + entity.id,
         position: {
             x: entity.position.x,
@@ -50,6 +53,8 @@ const EntitiesEditor = () => {
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
     const minSidebarWidth = 300;
     const maxSidebarWidth = 1200;
+    const [entityCreationModalOpen, setEntityCreationModalOpen] = useState(false);
+    const [lastActionPosition, setLastActionPosition] = useState({x: 0, y: 0});
 
     const toggleSidebar = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -82,7 +87,6 @@ const EntitiesEditor = () => {
     }
 
     const closeContextMenu = () => {
-        console.log('close context menu');
         setNodes((nds) => {
             return nds.filter((nd) => { return nd.id !== 'context-menu' });
         });
@@ -127,6 +131,7 @@ const EntitiesEditor = () => {
     }
 
     useEffect(() => {
+        //TODO: Add case of reload.
         if(application && !loaded) {
             loadNodes();
             setLoaded(true);
@@ -180,10 +185,12 @@ const EntitiesEditor = () => {
         }
 
         const viewportPoint = reactFlowInstance.screenToFlowPosition({ x: event.clientX, y: event.clientY});
+        setLastActionPosition(viewportPoint);
 
         const newNode = {
             id: 'context-menu', // or any unique ID
-            data: { label: 'New Node' },
+            type: 'contextMenuNode',
+            data: { label: 'New Node', items: [ {key: 'create-entity', icon: <LibraryAdd />, text: 'Create Entity', onClick: () => { setEntityCreationModalOpen(true); closeContextMenu(); }} ] },
             position: viewportPoint,
             // other node properties
         };
@@ -196,6 +203,41 @@ const EntitiesEditor = () => {
             return nds.concat(newNode);
         });
     };
+
+    const addEntity = (data:any) => {
+        //TODO: Add entity to application state too, but keep in mind not to trigger infinite loop.
+        let entity = {
+            name: data.entityId,
+            id: data.entityId,
+            attributes: {
+                [data.primaryAttributeId]: {
+                    name: data.primaryAttributeId,
+                    type: data.primaryAttributeType,
+                    id: data.primaryAttributeId,
+                    isRequired: true,
+                    isIndexed: true,
+                    isUnique: true,
+                    isImmutable: true,
+                    isSensitive: false,
+                }
+            },
+            position: lastActionPosition,
+        }
+        addEntityToApplication(entity);
+        setNodes((nds) => {
+            return nds.concat({
+                id: 'entity_' + entity.id,
+                position: {
+                    x: entity.position.x,
+                    y: entity.position.y,
+                },
+                data: {
+                    id : entity.id,
+                },
+                type: 'entityNode',
+            });
+        });
+    }
 
     return (
         <div ref={entityEditorRef} style={{width: '100%', height: '100%'}}>
@@ -236,6 +278,7 @@ const EntitiesEditor = () => {
                 <div className={`rightSidebar ${isSidebarCollapsed ? 'collapsed' : ''}`} style={isSidebarCollapsed ? {} : {width: sidebarWidth}}>
                     <EntitySidebar selectedEntity={selectedEntity} isCollapsed={isSidebarCollapsed}/>
                 </div>
+                <ModalCreateEntity open={entityCreationModalOpen} onClose={() => { setEntityCreationModalOpen(false); }} onFormSubmit={addEntity} />
                 </div>)
             }
         </div>
