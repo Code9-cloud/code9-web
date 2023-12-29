@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Coda&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap');
+
+#signin {
+    /* border: 1px solid red; */
+    height: 100%;
+    font-family: 'Plus Jakarta Sans';
+    color: white;
+}
+
+#signin--signin {
+    position: relative;
+    /* border: 1px solid red; */
+    width: 62.5%;
+    background-color: #12111C;
+}
+
+#signin--signin > * {
+    /* border: 1px solid red; */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sign In Main Form */
+/*-------------------------------------*/
+#signin--signin--main {
+    margin-top: 5%;
+    display: flex;
+}
+
+#signin--signin--main > *{
+    /* border: 1px solid red; */
+    margin-bottom: .5%;
+}
+
+#signin--signin--logo {
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+}
+
+#signin--signin--logo *{
+    margin-bottom: 3%;
+    justify-content: center;
+    text-align: center;
+}
+
+#signin--signin--inputs {
+    width: 500px;
+    margin: auto;
+    margin-top: 30px;
+}
+
+
+#signin--signin--inputs > * {
+    margin-bottom: 6%;
+}
+
+
+.signin--input > div {
+    margin-bottom: 8px;
+}
+
+#email {
+    margin-bottom: 2.5%;
+}
+#signin--helpers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+/*-------------------------------------*/
+
+/* Footer */
+/*-------------------------------------*/
+footer {
+    position: absolute;
+    bottom: 2.5%;
+    text-align: center;
+    font-weight: 200;
+}
+/*-------------------------------------*/

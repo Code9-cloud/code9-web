@@ -7,6 +7,8 @@ import { GlobalContext } from '../../GlobalContext';
 import {ListItemButton, SvgIcon} from "@mui/material";
 import {Api as ApiIcon, Category as CategoryIcon, RocketLaunch as RocketLaunchIcon} from "@mui/icons-material";
 
+
+
 const Sidebar: React.FC = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const { currentSection, setSection } = useContext(GlobalContext);

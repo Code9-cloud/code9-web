@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Coda&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap');
+
+#landpage {
+    /* border: 1px solid red; */
+    height: 100%;
+    font-family: 'Plus Jakarta Sans';
+    color: white;
+}
+
+#landpage--main {
+    height: 100%;
+    /* border: 1px solid red; */
+    width: 62.5%;
+    display: flex;
+    justify-content: center;
+}
+
+#landpage--main--check {
+    /* border: 1px solid red; */
+    justify-content: center;
+    height: 500px;
+    width: 60%;
+    margin-top: 10%;
+    text-align: center;
+}
+
+#landpage--main--check * {
+    /* border: 1px solid red; */
+}
+
+#main--go--back {
+    width: 80%;
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+}

@@ -6,6 +6,8 @@ import {GlobalProvider} from "./GlobalContext";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import theme from './theme';
+import { BrowserRouter } from 'react-router-dom';
+
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -13,15 +15,18 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 const root = ReactDOM.createRoot(
+
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <GlobalProvider>
       <ThemeProvider theme={theme}>
+        <BrowserRouter>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
           <App />
+        </BrowserRouter>
       </ThemeProvider>
     </GlobalProvider>
   </React.StrictMode>
