@@ -5,6 +5,10 @@
     background: #12111C;
 }
 
+.entity-node.selected {
+    border: 1px solid yellowgreen;
+}
+
 .entity-node label {
     display: block;
     color: #777;

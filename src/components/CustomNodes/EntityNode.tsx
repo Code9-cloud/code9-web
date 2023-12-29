@@ -1,41 +1,47 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Handle, Position } from 'reactflow';
 import './EntityNode.css';
 import {Typography} from "@mui/material";
 import EntityAttribute from "./EntityAttribute";
+import {GlobalContext} from "../../GlobalContext";
 
 const handleStyle = { left: 10 };
 
-function EntityNodeHeader({ data } : any) {
+function EntityNodeHeader({ name } : any) {
     return (
         <div className="entity-node__header">
-            <Typography variant={"body1"}>{data.entity_name}</Typography>
-            <Handle type={'source'} position={Position.Right} id={data.entity_name+'-src'} style={{visibility: 'hidden'}}/>
+            <Typography variant={"body1"}>{name}</Typography>
+            <Handle type={'source'} position={Position.Right} id={name+'-src'} style={{visibility: 'hidden'}}/>
         </div>
     );
 }
 
 function EntityNode({ data } : any) {
+    const {application} = React.useContext(GlobalContext);
+    const entity = application?.entities[data.id];
+    const attributes = entity?.attributes;
+
+
     const onChange = useCallback((evt: any) => {
         console.log(evt.target.value);
     }, []);
 
     return (
-        <div className="entity-node">
-            <EntityNodeHeader data={data} />
+        <div className={`entity-node ${data.selected ? 'selected' : ''}`}>
+            <EntityNodeHeader name={entity?.name} />
             {/*<div className="entity-node__header">*/}
             {/*    <Typography variant={"body1"}>{data.entity_name}</Typography>*/}
             {/*    <Handle type={'source'} position={Position.Right} id={data.entity_name+'-src'} style={{visibility: 'hidden'}}/>*/}
             {/*</div>*/}
             <div className="entity-node__item_container">
-                { data.attributes.map((attribute: any) => (
-                    <EntityAttribute key={attribute.name} data={attribute} />
+                { attributes && Object.values(attributes).map((attribute: any) => (
+                    <EntityAttribute key={attribute.id} data={attribute} />
                     // <div className="entity-node__item">
                     //     <div className="entity-node__item__name">{attribute.name}</div>
                     //     <div className="entity-node__item__type">{attribute.type}</div>
                     // </div>
                 ))}
-                <Handle type={'target'} position={Position.Left} id={data.entity_name+'-tgt'} />
+                <Handle type={'target'} position={Position.Left} id={entity?.name+'-tgt'} />
             </div>
         </div>
     );

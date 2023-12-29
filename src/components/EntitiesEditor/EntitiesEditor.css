@@ -1,0 +1,29 @@
+.reactFlowContainer {
+    flex-grow: 1; /* React Flow container takes up the remaining space */
+    position: relative;
+}
+
+.rightSidebar {
+    width: 300px; /* Initial width of the sidebar */
+}
+
+.rightSidebar.collapsed {
+    width: 0; /* Collapse the sidebar */
+    border-left: 5px solid #2B2B38;
+}
+
+/* Style for the floating button */
+.floatingButton {
+    position: absolute; /* Positioned relative to its nearest positioned ancestor */
+    top: 10px; /* Adjust as needed */
+    right: 0; /* Adjust so it's outside the collapsed sidebar */
+    z-index: 1000; /* Ensure it's above other elements */
+    cursor: pointer;
+    /* ... style the button as needed ... */
+}
+
+.entity-editor-sidebar-resizer {
+    width: 5px;
+    cursor: ew-resize;
+    background-color: #2B2B38;
+}
