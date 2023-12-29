@@ -7,6 +7,12 @@ import FlowEditor from "./components/FlowEditor/FlowEditor";
 import ComingSoon from "./components/ComingSoon/ComingSoon";
 import SignIn from "./components/SignIn/SignIn";
 import './App.css';
+import {Routes, Route, useNavigate} from 'react-router-dom';
+import SignUp from './components/SignUp/SingUp';
+import LandingPage from './components/LandingPage/LandingPage';
+import MainPage from './MainPage';
+import Onboarding1 from './components/Onboarding/Onboarding1';
+import Onboarding2 from './components/Onboarding/Onboarding2';
 
 function App() {
     const { user, currentSection } = useContext(GlobalContext);
@@ -25,18 +31,16 @@ function App() {
     };
     return (
         <div className="app-container">
-            { !user ? (<SignIn />) :
-                ( <>
-                    <Navbar />
-                    <div className="app-body" style={{ display: 'flex', flexDirection: 'row' }}>
-                        <Sidebar />
-                        <div className="main-content">
-                            {currentSection === 'Entities' && <EntitiesEditor />}
-                            {currentSection === 'Services' && <FlowEditor />}
-                            {currentSection === 'Deploy' && <ComingSoon />}
-                        </div>
-                    </div>
-                </> )
+            { !user ? (
+                <Routes>
+                    <Route path='/' element={<SignIn />} />
+                    <Route path='/signup' element={<SignUp />} />
+                    <Route path='/land' element={<LandingPage />}/>
+                    <Route path='/mainpage' element={<MainPage />}/>
+                    <Route path='/onboard1' element={<Onboarding1 />}/>
+                    <Route path='/onboard2' element={<Onboarding2 />}/>
+                </Routes>
+            ) : (<MainPage />)
             }
         </div>
     );

@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Coda&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap');
+
+.sidepanel {
+    /* border: 1px solid red; */
+    width: 35%;
+    height: 100%;
+}
+
+.sidepanel > * {
+    /* border: 1px solid red; */
+    margin-left: 15%;
+}
+
+/* Side Panel Logo */
+/*-------------------------------------*/
+.sidepanel--logo {
+    /* border: 1px solid red; */
+    margin-top: 7.5%;
+    height: 75px;
+}
+
+.sidepanel--logo img {
+    /* border: 1px solid red; */
+    height: 100%;
+}
+/*-------------------------------------*/
+
+
+
+/* Side Panel Main Content */
+/*-------------------------------------*/
+.sidepanel--main {
+    /* border: 1px solid red; */
+    margin-top: 12.5%;
+}
+
+.sidepanel--main > * {
+    /* border: 1px solid red; */
+    width: 75%;
+}
+
+.sidepanel--main--head {
+    /* border: 1px solid red; */
+}
+
+.sidepanel--main--head div {
+    /* border: 1px solid red; */
+    font-weight: 700;
+    font-size: 32px;
+}
+
+ul {
+    margin-top: 5%;
+}
+
+.sidepanel--main--points {
+    /* border: 1px solid red; */
+    font-size: 110%;
+    font-weight: 500;
+    margin-bottom: 5%;
+}
+/*-------------------------------------*/
+
+
+
+/* Side Panel Vector */
+/*-------------------------------------*/
+.sidepanel--vector {
+    margin-left: 0;
+    /* border: 1px solid red; */
+    bottom: 0;
+    position: absolute;
+}
+/*-------------------------------------*/

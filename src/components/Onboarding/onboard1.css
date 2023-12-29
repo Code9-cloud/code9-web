@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Coda&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap');
+
+#onboard1 {
+    /* border: 1px solid red; */
+    height: 100%;
+    overflow-y: auto;
+    font-family: 'Plus Jakarta Sans';
+}
+
+#onboard1 * {
+    /* border: 1px solid red; */
+}
+
+#onboard1--main {
+    width: 60%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#onboard1--main--heading {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5%;
+}
+
+#onboard1--main--main > * {
+    margin-bottom: 2.5%;
+}
+
+.display {
+    display: flex;
+    justify-content: space-between;
+}
+.togglebutton {
+    width: 100px;
+    font-family: 'Plus Jakarta Sans';
+}
+
+.input{
+    width: 47.5%
+}
+
+#input--name > div, #input--size > div, #input--appname > div, #input--role > div {
+    margin-bottom: 5px;
+}
+
+#mcq--checkboxes {
+    display: flex;
+    justify-content: space-between;
+}
+
+.checklist {
+    width: 47.5%;
+}
