@@ -4,6 +4,7 @@ type AttributeType = {
     name: string;
     type: string;
     id: string;
+    isPrimary?: boolean;
     isRequired: boolean;
     isIndexed: boolean;
     isUnique: boolean;
@@ -74,6 +75,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
                             name: 'Table Id',
                             type: 'string',
                             id: 'table_id',
+                            isPrimary: true,
                             isRequired: true,
                             isIndexed: false,
                             isUnique: false,
@@ -111,6 +113,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
                             name: 'Restaurant Id',
                             type: 'string',
                             id: 'restaurant_id',
+                            isPrimary: true,
                             isRequired: true,
                             isIndexed: true,
                             isUnique: true,

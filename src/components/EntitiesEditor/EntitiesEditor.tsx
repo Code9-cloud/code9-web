@@ -214,6 +214,7 @@ const EntitiesEditor = () => {
                     name: data.primaryAttributeId,
                     type: data.primaryAttributeType,
                     id: data.primaryAttributeId,
+                    isPrimary: true,
                     isRequired: true,
                     isIndexed: true,
                     isUnique: true,
