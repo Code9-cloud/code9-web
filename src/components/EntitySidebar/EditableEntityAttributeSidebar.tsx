@@ -1,13 +1,21 @@
 import {Box, IconButton, MenuItem, TextField, Typography} from "@mui/material";
 import {ArrowDropDown, ArrowDropUp, Key as KeyIcon} from "@mui/icons-material";
 import React from "react";
+import {GlobalContext} from "../../GlobalContext";
 
-function EditableEntityAttributeSidebar( {data, isEditing} : any) {
+function EditableEntityAttributeSidebar( {data, selectedEntityId, isEditing, onChange} : any) {
+    const { application } = React.useContext(GlobalContext);
     const [isCollapsed, setIsCollapsed] = React.useState(true);
     const [attributeCopy, setAttributeCopy] = React.useState(data);
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
     }
+
+    const handleChange = (attributeCopy: any) => {
+        onChange(attributeCopy);
+        setAttributeCopy(attributeCopy);
+    }
+
     return (
         <>
             <div style={{padding: isCollapsed ? '5px 10px' : '5px 10px 0px', borderTop: '1px solid #2B2B38'}}>
@@ -28,7 +36,7 @@ function EditableEntityAttributeSidebar( {data, isEditing} : any) {
                         }}>
                         {data.isPrimary && <KeyIcon />}
                         {!isEditing && (<Typography variant="body2">{data.name}</Typography>)}
-                        {isEditing && (<TextField value={attributeCopy.name} onChange={(event) => { setAttributeCopy({...attributeCopy, name: event.target.value})}} />)}
+                        {isEditing && (<TextField value={attributeCopy.name} onChange={(event) => { handleChange({...attributeCopy, name: event.target.value})}} />)}
                     </Box>
                     <IconButton onClick={toggleCollapse} style={{padding:'0'}} size={"small"} disableRipple={true}>{ isCollapsed ? <ArrowDropDown fontSize={"small"} /> : <ArrowDropUp fontSize={"small"}/> } {/* Replace with your chosen icon */}
                     </IconButton>
@@ -42,8 +50,7 @@ function EditableEntityAttributeSidebar( {data, isEditing} : any) {
                         justifyContent: 'space-between',
                     }}>
                     <Typography variant="caption">ID</Typography>
-                    { !isEditing && <Typography variant="caption">{data.id}</Typography> }
-                    { isEditing && <TextField value={attributeCopy.id} onChange={(event) => { setAttributeCopy({...attributeCopy, id: event.target.value})}} /> }
+                    <Typography variant="caption">{data.id}</Typography>
                 </Box>
                 <Box
                     sx={{
@@ -53,7 +60,7 @@ function EditableEntityAttributeSidebar( {data, isEditing} : any) {
                     }}>
                     <Typography variant="caption">type</Typography>
                     { !isEditing && <Typography variant="caption">{data.type}</Typography> }
-                    { isEditing && <TextField select value={attributeCopy.type} onChange={(event) => { setAttributeCopy({...attributeCopy, type: event.target.value})}}>
+                    { isEditing && <TextField select value={attributeCopy.type} onChange={(event) => { handleChange({...attributeCopy, type: event.target.value})}}>
                         <MenuItem value="string">String</MenuItem>
                         <MenuItem value="number">Number</MenuItem>
                         {!data.isPrimary && <MenuItem value="boolean">Boolean</MenuItem>}
@@ -67,9 +74,58 @@ function EditableEntityAttributeSidebar( {data, isEditing} : any) {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                     }}>
+                    { !isEditing && (attributeCopy.type === 'entity_ref' || attributeCopy.type === 'attribute_ref') &&
+                        <Typography variant="caption">Reference Entity</Typography> }
+                    { !isEditing && (attributeCopy.type === 'entity_ref' || attributeCopy.type === 'attribute_ref') &&
+                        <Typography variant="caption">{attributeCopy.referenceEntityId}</Typography>
+                    }
+                    { isEditing && (attributeCopy.type === 'entity_ref' || attributeCopy.type === 'attribute_ref') &&
+                        <TextField
+                            select
+                            label="Reference Entity"
+                            name="referenceEntityId"
+                            value={attributeCopy.referenceEntityId ? attributeCopy.referenceEntityId : ''}
+                            onChange={(event) => { handleChange({...attributeCopy, referenceEntityId: event.target.value})}}
+                            fullWidth
+                            margin="normal">
+                            { Object.values(application ? Object.values(application.entities).filter((et) => { return et.id !== selectedEntityId}) : []).map((et) => {
+                                return (<MenuItem value={et.id} key={et.id}>{et.name}</MenuItem>)
+                            }) }
+                        </TextField>}
+                </Box>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}>
+                    { !isEditing && (attributeCopy.type === 'attribute_ref' && attributeCopy.referenceEntityId) &&
+                        <Typography variant="caption">Reference Attribute</Typography> }
+                    { !isEditing && (attributeCopy.type === 'attribute_ref' && attributeCopy.referenceEntityId) &&
+                        <Typography variant="caption">{attributeCopy.referenceAttributeId}</Typography> }
+                    { isEditing && (attributeCopy.type === 'attribute_ref' && attributeCopy.referenceEntityId) &&
+                        <TextField
+                            select
+                            label="Reference Attribute"
+                            name="referenceAttributeId"
+                            value={attributeCopy.referenceAttributeId ? attributeCopy.referenceAttributeId : ''}
+                            onChange={(event) => { handleChange({...attributeCopy, referenceAttributeId: event.target.value})}}
+                            fullWidth
+                            margin="normal">
+                            { Object.values(application && application.entities[attributeCopy.referenceEntityId] ? Object.values(application.entities[attributeCopy.referenceEntityId].attributes) : []).map((at) => {
+                                return (<MenuItem value={at.id} key={at.id}>{at.name}</MenuItem>)
+                            }) }
+                        </TextField>}
+                </Box>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}>
                     <Typography variant="caption">Required</Typography>
                     { !isEditing && <Typography variant="caption">{data.isRequired ? 'true' : 'false'}</Typography> }
-                    { isEditing && <input type="checkbox" checked={attributeCopy.isRequired} onChange={(event) => { setAttributeCopy({...attributeCopy, isRequired: event.target.checked})}} /> }
+                    { isEditing && <input type="checkbox" checked={attributeCopy.isRequired} onChange={(event) => { handleChange({...attributeCopy, isRequired: event.target.checked})}} /> }
                 </Box>
                 <Box
                     sx={{
@@ -79,7 +135,7 @@ function EditableEntityAttributeSidebar( {data, isEditing} : any) {
                     }}>
                     <Typography variant="caption">Unique</Typography>
                     { !isEditing && <Typography variant="caption">{data.isUnique ? 'true' : 'false'}</Typography> }
-                    { isEditing && <input type="checkbox" checked={attributeCopy.isUnique} onChange={(event) => { setAttributeCopy({...attributeCopy, isUnique: event.target.checked})}} /> }
+                    { isEditing && <input type="checkbox" checked={attributeCopy.isUnique} onChange={(event) => { handleChange({...attributeCopy, isUnique: event.target.checked})}} /> }
                 </Box>
             </div> }
         </>);

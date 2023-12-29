@@ -3,6 +3,8 @@ import React, { createContext, useState, ReactNode } from 'react';
 type AttributeType = {
     name: string;
     type: string;
+    referenceEntityId?: string;
+    referenceAttributeId?: string;
     id: string;
     isPrimary?: boolean;
     isRequired: boolean;
@@ -38,6 +40,9 @@ type GlobalContextType = {
     application: ApplicationType | null;
     loadApplication: () => void;
     addEntityToApplication: (entity: EntityType) => void;
+    addAttributeToEntity: (entityId: string, attribute: AttributeType) => void;
+    setAttribute: (entityId: string, attributeId: string, attribute: AttributeType) => void;
+    changeEntityName: (entityId: string, name: string) => void;
 };
 
 export const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType);
@@ -84,7 +89,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
                         },
                         table_number: {
                             name: 'Table Number',
-                            type: 'int',
+                            type: 'number',
                             id: 'table_number',
                             isRequired: true,
                             isIndexed: false,
@@ -122,7 +127,8 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
                         },
                         tables: {
                             name: 'Tables',
-                            type: 'table',
+                            type: 'entity_ref',
+                            referenceEntityId: 'table',
                             id: 'tables',
                             isRequired: true,
                             isIndexed: false,
@@ -140,13 +146,72 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     const addEntityToApplication = (entity: EntityType) => {
         setApplication((app) => {
             if (!app) return app;
-            app.entities[entity.id] = entity;
-            return app;
+            return {
+                ...app,
+                entities: {
+                    ...app.entities,
+                    [entity.id]: entity,
+                }
+            };
+        });
+    }
+
+    const addAttributeToEntity = (entityId: string, attribute: AttributeType) => {
+        setApplication((app) => {
+            if (!app) return app;
+            return {
+                ...app,
+                entities: {
+                    ...app.entities,
+                    [entityId]: {
+                        ...app.entities[entityId],
+                        attributes: {
+                            ...app.entities[entityId].attributes,
+                            [attribute.id]: attribute,
+                        }
+                    }
+                }
+            };
+        });
+    }
+
+    const setAttribute = (entityId: string, attributeId: string, attribute: AttributeType) => {
+        setApplication((app) => {
+            if (!app) return app;
+            return {
+                ...app,
+                entities: {
+                    ...app.entities,
+                    [entityId]: {
+                        ...app.entities[entityId],
+                        attributes: {
+                            ...app.entities[entityId].attributes,
+                            [attributeId]: attribute,
+                        }
+                    }
+                }
+            };
+        });
+    }
+
+    const changeEntityName = (entityId: string, name: string) => {
+        setApplication((app) => {
+            if (!app) return app;
+            return {
+                ...app,
+                entities: {
+                    ...app.entities,
+                    [entityId]: {
+                        ...app.entities[entityId],
+                        name: name,
+                    }
+                }
+            };
         });
     }
 
     return (
-        <GlobalContext.Provider value={{ user, signIn, signOut, currentSection, setSection, application, loadApplication, addEntityToApplication}}>
+        <GlobalContext.Provider value={{ user, signIn, signOut, currentSection, setSection, application, loadApplication, addEntityToApplication, addAttributeToEntity, setAttribute, changeEntityName}}>
             {children}
         </GlobalContext.Provider>
     );

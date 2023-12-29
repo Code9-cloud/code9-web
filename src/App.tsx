@@ -7,7 +7,7 @@ import FlowEditor from "./components/FlowEditor/FlowEditor";
 import ComingSoon from "./components/ComingSoon/ComingSoon";
 import SignIn from "./components/SignIn/SignIn";
 import './App.css';
-import {Routes, Route, useNavigate} from 'react-router-dom';
+import {Routes, Route, useNavigate} from 'react-router';
 import SignUp from './components/SignUp/SingUp';
 import LandingPage from './components/LandingPage/LandingPage';
 import MainPage from './MainPage';
