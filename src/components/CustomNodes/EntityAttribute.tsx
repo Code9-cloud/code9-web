@@ -21,7 +21,7 @@ function EntityAttribute( {data, entity} : any) {
                     // Add additional styling as needed
                 }}
             >
-                    <Typography variant="body2">{data.name}</Typography>
+                    <Typography variant="body2" fontFamily={"Cascadia Code"}>{data.name}</Typography>
                     <IconButton onClick={toggleCollapse} style={{padding:'0'}} size={"small"} disableRipple={true}>{ isCollapsed ? <ArrowDropDown fontSize={"small"} /> : <ArrowDropUp fontSize={"small"}/> } {/* Replace with your chosen icon */}
                     </IconButton>
                     <Handle type={'target'} position={Position.Right} id={'et_'+entity+'_at_'+data.id+'-tgt'} style={{top: "unset"}} />

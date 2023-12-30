@@ -2,6 +2,7 @@ import {Box, IconButton, MenuItem, TextField, Typography} from "@mui/material";
 import {ArrowDropDown, ArrowDropUp, Key as KeyIcon} from "@mui/icons-material";
 import React from "react";
 import {GlobalContext} from "../../GlobalContext";
+import CodeStyledTextField from "../CodeStyled/CodeStyledTextField";
 
 function EditableEntityAttributeSidebar( {data, selectedEntityId, isEditing, onChange} : any) {
     const { application } = React.useContext(GlobalContext);
@@ -36,7 +37,7 @@ function EditableEntityAttributeSidebar( {data, selectedEntityId, isEditing, onC
                         }}>
                         {data.isPrimary && <KeyIcon />}
                         {!isEditing && (<Typography variant="body2">{data.name}</Typography>)}
-                        {isEditing && (<TextField value={attributeCopy.name} onChange={(event) => { handleChange({...attributeCopy, name: event.target.value})}} />)}
+                        {isEditing && (<CodeStyledTextField value={attributeCopy.name} onChange={(event) => { handleChange({...attributeCopy, name: event.target.value})}} />)}
                     </Box>
                     <IconButton onClick={toggleCollapse} style={{padding:'0'}} size={"small"} disableRipple={true}>{ isCollapsed ? <ArrowDropDown fontSize={"small"} /> : <ArrowDropUp fontSize={"small"}/> } {/* Replace with your chosen icon */}
                     </IconButton>

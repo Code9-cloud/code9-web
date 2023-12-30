@@ -7,6 +7,12 @@ const theme = createTheme({
             default: '#12111C',
         },
     },
+    typography: {
+        fontFamily: [
+            'Roboto',
+            // '"Cascadia Code"',
+        ].join(','),
+    },
 });
 
 export default theme;
