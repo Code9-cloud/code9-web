@@ -130,11 +130,44 @@ const EntitiesEditor = () => {
         setSelectedEntity(null);
     }
 
+    const resetEdges = () => {
+        let edges : any[] = [];
+        Object.values(application?.entities ? application.entities : []).forEach((entity) => {
+            Object.values(entity.attributes).forEach((attribute) => {
+                if(attribute.type === 'attribute_ref') {
+                    edges.push({
+                        id: 'edge_' + entity.id + '_' + attribute.id,
+                        source: 'entity_' + attribute.referenceEntityId,
+                        sourceHandle: 'et_' + attribute.referenceEntityId + '_at_' + attribute.referenceAttributeId + '-src',
+                        target: 'entity_' + entity.id,
+                        targetHandle: 'et_' + entity.id + '_at_' + attribute.id + '-tgt',
+                        type: 'smoothstep',
+                    });
+                }
+                if(attribute.type === 'entity_ref') {
+                    edges.push({
+                        id: 'edge_' + entity.id + '_' + attribute.id,
+                        source: 'entity_' + attribute.referenceEntityId,
+                        sourceHandle: 'et_' + attribute.referenceEntityId + '-src',
+                        target: 'entity_' + entity.id,
+                        targetHandle: 'et_' + entity.id + '_at_' + attribute.id + '-tgt',
+                        type: 'smoothstep',
+                    });
+                }
+            });
+        });
+        setEdges(edges);
+    }
+
     useEffect(() => {
         //TODO: Add case of reload.
         if(application && !loaded) {
             loadNodes();
+            resetEdges();
             setLoaded(true);
+        }
+        if(application && loaded) {
+            resetEdges();
         }
     }, [application]);
 
@@ -161,15 +194,15 @@ const EntitiesEditor = () => {
 
     // we are using a bit of a shortcut here to adjust the edge type
     // this could also be done with a custom edge for example
-    const edgesWithUpdatedTypes = edges.map((edge) => {
-        if (edge.sourceHandle) {
-            // @ts-ignore
-            const edgeType = nodes.find((node) => node.type === 'custom').data.selects[edge.sourceHandle];
-            edge.type = edgeType;
-        }
-
-        return edge;
-    });
+    // const edgesWithUpdatedTypes = edges.map((edge) => {
+    //     if (edge.sourceHandle) {
+    //         // @ts-ignore
+    //         const edgeType = nodes.find((node) => node.type === 'custom').data.selects[edge.sourceHandle];
+    //         edge.type = edgeType;
+    //     }
+    //
+    //     return edge;
+    // });
 
     const flowStyle = {
         backgroundColor: "#171727"
@@ -251,7 +284,7 @@ const EntitiesEditor = () => {
                     <ReactFlow
                         style={flowStyle}
                             nodes={nodes}
-                            edges={edgesWithUpdatedTypes}
+                            edges={edges}
                             onNodesChange={onNodesChange}
                             onEdgesChange={onEdgesChange}
                             onNodeClick={onNodeClick}

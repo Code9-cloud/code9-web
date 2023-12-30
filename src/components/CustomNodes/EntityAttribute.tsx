@@ -21,10 +21,11 @@ function EntityAttribute( {data, entity} : any) {
                     // Add additional styling as needed
                 }}
             >
+                    <Handle type={'target'} position={Position.Left} id={'et_'+entity+'_at_'+data.id+'-tgt'} style={{top: "unset", visibility: "hidden", width: 0}} />
                     <Typography variant="body2" fontFamily={"Cascadia Code"}>{data.name}</Typography>
                     <IconButton onClick={toggleCollapse} style={{padding:'0'}} size={"small"} disableRipple={true}>{ isCollapsed ? <ArrowDropDown fontSize={"small"} /> : <ArrowDropUp fontSize={"small"}/> } {/* Replace with your chosen icon */}
                     </IconButton>
-                    <Handle type={'target'} position={Position.Right} id={'et_'+entity+'_at_'+data.id+'-tgt'} style={{top: "unset"}} />
+                    <Handle type={'source'} position={Position.Right} id={'et_'+entity+'_at_'+data.id+'-src'} style={{top: "unset", visibility: "hidden", width: 0}} />
                 </Box>
             </div>
             { !isCollapsed && <div style={{padding: '5px 10px 5px', backgroundColor: '#2A2A4D'}}>

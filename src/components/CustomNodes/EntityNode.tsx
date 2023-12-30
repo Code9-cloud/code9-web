@@ -7,11 +7,12 @@ import {GlobalContext} from "../../GlobalContext";
 
 const handleStyle = { left: 10 };
 
-function EntityNodeHeader({ name } : any) {
+function EntityNodeHeader({ name, id } : any) {
     return (
         <div className="entity-node__header">
+            <Handle type={'target'} position={Position.Left} id={'et_'+id+'-tgt'} style={{top: "unset", visibility: "hidden"}} />
             <Typography variant={"body1"}>{name}</Typography>
-            <Handle type={'source'} position={Position.Right} id={name+'-src'} style={{visibility: 'hidden'}}/>
+            <Handle type={'source'} position={Position.Right} id={'et_'+id+'-src'} style={{top: "unset", visibility: "hidden"}} />
         </div>
     );
 }
@@ -28,7 +29,7 @@ function EntityNode({ data } : any) {
 
     return (
         <div className={`entity-node ${data.selected ? 'selected' : ''}`}>
-            <EntityNodeHeader name={entity?.name} />
+            <EntityNodeHeader name={entity?.name} id={entity?.id} />
             {/*<div className="entity-node__header">*/}
             {/*    <Typography variant={"body1"}>{data.entity_name}</Typography>*/}
             {/*    <Handle type={'source'} position={Position.Right} id={data.entity_name+'-src'} style={{visibility: 'hidden'}}/>*/}
