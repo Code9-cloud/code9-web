@@ -1,3 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Coda&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap');
+
 .entity-editor-sidebar.collapsed{
     display: none;
+}
+
+
+.entity-attribute--sidebar {
+
+}
+
+.entity-editor-sidebar {
+    font-family: 'Plus Jakarta Sans';
+}
+
+.entity-editor-sidebar *{
+
+}
+
+.entity-edit-sidebar-header {
+    /* border: 1px solid blue; */
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'Cascadia Code'; 
+    src: local('Cascadia Code')
+    url('../../fonts/CascadiaCode-Regular.woff2') format('woff2');
 }

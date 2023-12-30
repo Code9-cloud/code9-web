@@ -24,7 +24,7 @@ const MainPage = () => {
         }
     };
     return (
-        <div>
+        <div className="app-container">
             <Navbar />
             <div className="app-body" style={{ display: 'flex', flexDirection: 'row' }}>
                 <Sidebar />

@@ -41,18 +41,20 @@ const EntitySidebar : React.FC<{selectedEntity: string|null, isCollapsed: boolea
                                 // Add additional styling as needed
                             }}
                         >
-                            { !isEditing && <Typography variant={"h5"}>{entity.name}</Typography> }
-                            { isEditing && <TextField value={entity.name} onChange={(event) => { /* logic to update entity name */}} /> }
+                            { !isEditing && <Typography style={{fontSize: "16px", marginLeft: "13px", padding: '11px 0'}} variant={"h5"}>{entity.name}</Typography> }
+                            { isEditing && <TextField inputProps={{style: {height: "10px"}}}value={entity.name} onChange={(event) => { /* logic to update entity name */}} /> }
                             { isEditing && (<IconButton onClick={handleDiscardClick}><DeleteIcon /></IconButton>)}
                             <IconButton onClick={isEditing ? handleSaveClick : handleEditClick}>
                                 {isEditing ? <SaveIcon /> : <EditIcon />}
                             </IconButton>
                         </Box>
                     </div>
+                    <br />
                     <div className="entity-edit-sidebar-attributes">
                         { Object.values(entity.attributes).map((attribute: any) => (
                             <div className="entity-edit-sidebar-attribute" key={attribute.id}>
                                 <EditableEntityAttributeSidebar data={attribute} isEditing={isEditing} />
+                                <br />
                             </div>
                         ))}
                     </div>

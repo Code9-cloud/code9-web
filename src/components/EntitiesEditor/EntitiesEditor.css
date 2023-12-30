@@ -3,6 +3,10 @@
     position: relative;
 }
 
+.reactFlowContainer * {
+    /* border: 1px solid red; */
+}
+
 .rightSidebar {
     width: 300px; /* Initial width of the sidebar */
 }

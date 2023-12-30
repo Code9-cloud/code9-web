@@ -6,7 +6,7 @@
 }
 
 .entity-node.selected {
-    border: 1px solid yellowgreen;
+    /* border: 1px solid yellowgreen; */
 }
 
 .entity-node label {
