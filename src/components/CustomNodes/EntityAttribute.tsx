@@ -1,8 +1,9 @@
 import {Box, IconButton, Typography} from "@mui/material";
 import {ArrowDropDown, ArrowDropUp} from "@mui/icons-material";
 import React from "react";
+import {Handle, Position} from "reactflow";
 
-function EntityAttribute( {data} : any) {
+function EntityAttribute( {data, entity} : any) {
     const [isCollapsed, setIsCollapsed] = React.useState(true);
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
@@ -23,6 +24,7 @@ function EntityAttribute( {data} : any) {
                     <Typography variant="body2">{data.name}</Typography>
                     <IconButton onClick={toggleCollapse} style={{padding:'0'}} size={"small"} disableRipple={true}>{ isCollapsed ? <ArrowDropDown fontSize={"small"} /> : <ArrowDropUp fontSize={"small"}/> } {/* Replace with your chosen icon */}
                     </IconButton>
+                    <Handle type={'target'} position={Position.Right} id={'et_'+entity+'_at_'+data.id+'-tgt'} style={{top: "unset"}} />
                 </Box>
             </div>
             { !isCollapsed && <div style={{padding: '5px 10px 5px', backgroundColor: '#2A2A4D'}}>
