@@ -37,12 +37,14 @@ type GlobalContextType = {
     signOut: () => void;
     currentSection: string;
     setSection: (section: string) => void;
-    application: ApplicationType | null;
+    application: ApplicationType;
     loadApplication: () => void;
     addEntityToApplication: (entity: EntityType) => void;
     addAttributeToEntity: (entityId: string, attribute: AttributeType) => void;
     setAttribute: (entityId: string, attributeId: string, attribute: AttributeType) => void;
     changeEntityName: (entityId: string, name: string) => void;
+    currentServicePath: string[];
+    setCurrentServicePath: (path: string[]) => void;
 };
 
 export const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType);
@@ -53,8 +55,12 @@ type GlobalProviderProps = {
 
 export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     const [user, setUser] = useState<UserType>(null);
-    const [application, setApplication] = useState<ApplicationType | null>(null);
+    const [application, setApplication] = useState<ApplicationType>({
+        name: '',
+        entities: {},
+    });
     const [currentSection, setCurrentSection] = useState('Entities');
+    const [currentServicePath, setCurrentServicePath] = useState<string[]>([]);
 
     const signIn = (userData: UserType) => {
         setUser(userData);
@@ -211,7 +217,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     }
 
     return (
-        <GlobalContext.Provider value={{ user, signIn, signOut, currentSection, setSection, application, loadApplication, addEntityToApplication, addAttributeToEntity, setAttribute, changeEntityName}}>
+        <GlobalContext.Provider value={{ user, signIn, signOut, currentSection, setSection, application, loadApplication, addEntityToApplication, addAttributeToEntity, setAttribute, changeEntityName, currentServicePath, setCurrentServicePath}}>
             {children}
         </GlobalContext.Provider>
     );

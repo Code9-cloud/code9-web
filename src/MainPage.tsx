@@ -6,6 +6,7 @@ import EntitiesEditor from "./components/EntitiesEditor/EntitiesEditor";
 import FlowEditor from "./components/FlowEditor/FlowEditor";
 import ComingSoon from "./components/ComingSoon/ComingSoon";
 import './App.css';
+import ServiceEditor from "./components/ServiceEditor/ServiceEditor";
 
 
 const MainPage = () => {
@@ -30,7 +31,7 @@ const MainPage = () => {
                 <Sidebar />
                 <div className="main-content">
                     {currentSection === 'Entities' && <EntitiesEditor />}
-                    {currentSection === 'Services' && <FlowEditor />}
+                    {currentSection === 'Services' && <ServiceEditor />}
                     {currentSection === 'Deploy' && <ComingSoon />}
                 </div>
             </div>

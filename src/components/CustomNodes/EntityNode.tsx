@@ -19,8 +19,8 @@ function EntityNodeHeader({ name, id } : any) {
 
 function EntityNode({ data } : any) {
     const {application} = React.useContext(GlobalContext);
-    const entity = application?.entities[data.id];
-    const attributes = entity?.attributes;
+    const entity = application.entities[data.id];
+    const attributes = entity.attributes;
 
 
     const onChange = useCallback((evt: any) => {
@@ -29,14 +29,14 @@ function EntityNode({ data } : any) {
 
     return (
         <div className={`entity-node ${data.selected ? 'selected' : ''}`}>
-            <EntityNodeHeader name={entity?.name} id={entity?.id} />
+            <EntityNodeHeader name={entity.name} id={entity.id} />
             {/*<div className="entity-node__header">*/}
             {/*    <Typography variant={"body1"}>{data.entity_name}</Typography>*/}
             {/*    <Handle type={'source'} position={Position.Right} id={data.entity_name+'-src'} style={{visibility: 'hidden'}}/>*/}
             {/*</div>*/}
             <div className="entity-node__item_container">
                 { attributes && Object.values(attributes).map((attribute: any) => (
-                    <EntityAttribute key={attribute.id} data={attribute} entity={entity?.id} />
+                    <EntityAttribute key={attribute.id} data={attribute} entity={entity.id} />
                     // <div className="entity-node__item">
                     //     <div className="entity-node__item__name">{attribute.name}</div>
                     //     <div className="entity-node__item__type">{attribute.type}</div>

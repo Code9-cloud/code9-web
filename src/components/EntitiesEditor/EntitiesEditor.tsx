@@ -161,7 +161,7 @@ const EntitiesEditor = () => {
 
     useEffect(() => {
         //TODO: Add case of reload.
-        if(application && !loaded) {
+        if(application && application.name !== '' && !loaded) {
             loadNodes();
             resetEdges();
             setLoaded(true);
@@ -275,7 +275,7 @@ const EntitiesEditor = () => {
 
     return (
         <div ref={entityEditorRef} style={{width: '100%', height: '100%'}}>
-            { (application === null) ? ( <div>
+            { (application.name === '') ? ( <div>
                     <h1>Application not loaded</h1>
                     <button onClick={loadApplication}>Load Application</button>
                 </div>) :
@@ -309,8 +309,8 @@ const EntitiesEditor = () => {
                     </div>
                 </div>
                 { !isSidebarCollapsed && <div className={'entity-editor-sidebar-resizer'} onMouseDown={onResizeStart}></div>}
-                <div className={`rightSidebar ${isSidebarCollapsed ? 'collapsed' : ''}`} style={isSidebarCollapsed ? {} : {width: sidebarWidth}}>
-                    <EntitySidebar selectedEntity={selectedEntity} isCollapsed={isSidebarCollapsed}/>
+                <div className={`rightSidebar ${(isSidebarCollapsed || selectedEntity === null) ? 'collapsed' : ''}`} style={(isSidebarCollapsed || selectedEntity === null) ? {} : {width: sidebarWidth}}>
+                    <EntitySidebar selectedEntity={selectedEntity} isCollapsed={isSidebarCollapsed || selectedEntity === null}/>
                 </div>
                 <ModalCreateEntity open={entityCreationModalOpen} onClose={() => { setEntityCreationModalOpen(false); }} onFormSubmit={addEntity} />
                 </div>)
