@@ -21,16 +21,24 @@ type EntityType = {
     position: { x: number, y: number };
 };
 
+type FlowType = {
+    name: string;
+    id: string;
+}
+
 type ServiceType = {
     name: string;
     id: string;
-    position: { x: number, y: number };
+    // position: { x: number, y: number };
     subServices: Record<string,ServiceType>;
+    flows: Record<string, FlowType>;
 };
 
 type ApplicationType = {
     name: string;
     entities: Record<string,EntityType>;
+    services: Record<string, ServiceType>;
+    flows: Record<string, FlowType>;
 };
 
 type UserType = {
@@ -65,6 +73,8 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     const [application, setApplication] = useState<ApplicationType>({
         name: '',
         entities: {},
+        services: {},
+        flows: {}
     });
     const [currentSection, setCurrentSection] = useState('Entities');
     const [currentServicePath, setCurrentServicePath] = useState<string[]>([]);
@@ -152,6 +162,18 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
                     },
                     position: {x: 300, y: 0},
                 }
+            },
+            services: {
+                'auth': {
+                    name: 'Authentication',
+                    id: 'auth',
+                    subServices: {
+                    },
+                    flows: {
+                    }
+                }
+            },
+            flows: {
             }
         });
     }
