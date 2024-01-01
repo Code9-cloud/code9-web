@@ -21,6 +21,13 @@ type EntityType = {
     position: { x: number, y: number };
 };
 
+type ServiceType = {
+    name: string;
+    id: string;
+    position: { x: number, y: number };
+    subServices: Record<string,ServiceType>;
+};
+
 type ApplicationType = {
     name: string;
     entities: Record<string,EntityType>;
