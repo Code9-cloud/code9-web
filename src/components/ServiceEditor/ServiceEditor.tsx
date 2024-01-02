@@ -76,7 +76,7 @@ const ServiceEditor = () => {
         isFlow = isFlowChecker();
     }, [currentServicePath]);
 
-    return <div className={"service-editor"}>
+    return <div className={"service-editor"} style={{width: '100%', height: '100%', display: "flex", flexDirection: "column"}}>
         <Box display={'flex'} alignContent={'center'} justifyContent={'space-between'} style={{padding: '10px'}}>
             <Breadcrumbs>
                 <Chip icon={<Home />} key={0} onClick={navigateToServicePathIndex(0)}/>
@@ -93,7 +93,7 @@ const ServiceEditor = () => {
             <ModalCreateService open={isCreateServiceModalOpen} onClose={handleCreateServiceModalClose} onFormSubmit={handleCreateService}/>
             <ModalCreateFlow open={isCreateFlowModalOpen} onClose={handleCreateFlowModalClose} onFormSubmit={handleCreateFlow}/>
         </Box>
-        <Box>
+        <Box style={{width: '100%', height: '100%'}}>
             {isFlow && <SubFlowEditor />}
             {!isFlow && <SubServiceEditor />}
         </Box>

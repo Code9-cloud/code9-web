@@ -15,8 +15,8 @@
 
 .context-menu-node__item {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    /*align-items: left;*/
+    /*justify-content: left;*/
     background: #12111C;
     padding-top: 2px;
     padding-bottom: 2px;

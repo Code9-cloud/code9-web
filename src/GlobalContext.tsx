@@ -175,6 +175,10 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
                 }
             },
             flows: {
+                'test': {
+                    name: 'Test Flow',
+                    id: 'test',
+                }
             }
         });
     }
