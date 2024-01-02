@@ -30,7 +30,7 @@ type ServiceType = {
     name: string;
     id: string;
     // position: { x: number, y: number };
-    subServices: Record<string,ServiceType>;
+    services: Record<string,ServiceType>;
     flows: Record<string, FlowType>;
 };
 
@@ -168,7 +168,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
                 'auth': {
                     name: 'Authentication',
                     id: 'auth',
-                    subServices: {
+                    services: {
                     },
                     flows: {
                     }

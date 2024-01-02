@@ -8,7 +8,7 @@ import ModalCreateService from "./ModalCreateService";
 import ModalCreateFlow from "./ModalCreateFlow";
 
 const ServiceEditor = () => {
-    const { application, setApplication , currentServicePath } = useContext(GlobalContext);
+    const { application, setApplication , currentServicePath, setCurrentServicePath } = useContext(GlobalContext);
     const [isCreateServiceModalOpen, setIsCreateServiceModalOpen] = useState(false);
     const [isCreateFlowModalOpen, setIsCreateFlowModalOpen] = useState(false);
     const isRoot = currentServicePath.length === 0;
@@ -19,7 +19,7 @@ const ServiceEditor = () => {
         for (let i = 0; i < currentServicePath.length-1; i++) {
             service = service.services[currentServicePath[i]];
         }
-        return (service.flows[currentServicePath[currentServicePath.length - 1]] === undefined);
+        return !(service.flows[currentServicePath[currentServicePath.length - 1]] === undefined);
 
     }
     let isFlow = isFlowChecker();
@@ -49,7 +49,7 @@ const ServiceEditor = () => {
         service.services[data.serviceId] = {
             name: data.serviceName,
             id: data.serviceId,
-            subServices: {},
+            services: {},
             flows: {}
         };
         setApplication(applicationCopy);
@@ -68,23 +68,27 @@ const ServiceEditor = () => {
         setApplication(applicationCopy);
     }
 
+    const navigateToServicePathIndex = (index: number) => () => {
+        setCurrentServicePath(currentServicePath.slice(0, index));
+    }
+
     useEffect(() => {
         isFlow = isFlowChecker();
     }, [currentServicePath]);
 
     return <div className={"service-editor"}>
-        <Box display={'flex'} alignContent={'center'} justifyContent={'space-between'}>
+        <Box display={'flex'} alignContent={'center'} justifyContent={'space-between'} style={{padding: '10px'}}>
             <Breadcrumbs>
-                <Chip icon={<Home />} />
+                <Chip icon={<Home />} key={0} onClick={navigateToServicePathIndex(0)}/>
                 {
-                    currentServicePath.map((service: string) => {
-                        return <Chip label={service} />
+                    currentServicePath.map((service: string, index: number) => {
+                        return <Chip key={index+1} label={service} onClick={navigateToServicePathIndex(index + 1)}/>
                     })
                 }
             </Breadcrumbs>
             <Box>
-                { !isFlow && <Button onClick={handleCreateServiceModalOpen}>Create Service</Button>}
-                { !isFlow && <Button onClick={handleCreateFlowModalOpen}>Create Flow</Button> }
+                { !isFlow && <Button onClick={handleCreateServiceModalOpen} style={{padding: '0px 5px', backgroundColor: '#5245FF', marginRight: '10px', color: "white"}}>Create Service</Button>}
+                { !isFlow && <Button onClick={handleCreateFlowModalOpen} style={{padding: '0px 5px', backgroundColor: '#5245FF', color: "white"}}>Create Flow</Button> }
             </Box>
             <ModalCreateService open={isCreateServiceModalOpen} onClose={handleCreateServiceModalClose} onFormSubmit={handleCreateService}/>
             <ModalCreateFlow open={isCreateFlowModalOpen} onClose={handleCreateFlowModalClose} onFormSubmit={handleCreateFlow}/>
