@@ -1,12 +1,16 @@
 import {GlobalContext} from "../../GlobalContext";
-import {useContext, useEffect} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Box, Breadcrumbs, Button, Chip} from "@mui/material";
 import {Home} from "@mui/icons-material";
 import SubFlowEditor from "./SubFlowEditor";
 import SubServiceEditor from "./SubServiceEditor";
+import ModalCreateService from "./ModalCreateService";
+import ModalCreateFlow from "./ModalCreateFlow";
 
 const ServiceEditor = () => {
-    const { application, currentServicePath } = useContext(GlobalContext);
+    const { application, setApplication , currentServicePath } = useContext(GlobalContext);
+    const [isCreateServiceModalOpen, setIsCreateServiceModalOpen] = useState(false);
+    const [isCreateFlowModalOpen, setIsCreateFlowModalOpen] = useState(false);
     const isRoot = currentServicePath.length === 0;
     const isFlowChecker = () => {
         //TODO: Check doesn't validate cases exhaustively.
@@ -19,6 +23,50 @@ const ServiceEditor = () => {
 
     }
     let isFlow = isFlowChecker();
+
+    const handleCreateServiceModalClose = () => {
+        setIsCreateServiceModalOpen(false);
+    }
+
+    const handleCreateServiceModalOpen = () => {
+        setIsCreateServiceModalOpen(true);
+    }
+
+    const handleCreateFlowModalClose = () => {
+        setIsCreateFlowModalOpen(false);
+    }
+
+    const handleCreateFlowModalOpen = () => {
+        setIsCreateFlowModalOpen(true);
+    }
+
+    const handleCreateService = (data: {serviceId: string, serviceName: string}) => {
+        let applicationCopy = {...application}
+        let service : any = applicationCopy;
+        for (let i=0; i < currentServicePath.length; i++){
+            service = service.services[currentServicePath[i]];
+        }
+        service.services[data.serviceId] = {
+            name: data.serviceName,
+            id: data.serviceId,
+            subServices: {},
+            flows: {}
+        };
+        setApplication(applicationCopy);
+    }
+
+    const handleCreateFlow = (data: {flowId: string, flowName: string}) => {
+        let applicationCopy = {...application}
+        let service : any = applicationCopy;
+        for (let i=0; i < currentServicePath.length; i++){
+            service = service.services[currentServicePath[i]];
+        }
+        service.flows[data.flowId] = {
+            name: data.flowName,
+            id: data.flowId,
+        };
+        setApplication(applicationCopy);
+    }
 
     useEffect(() => {
         isFlow = isFlowChecker();
@@ -35,9 +83,11 @@ const ServiceEditor = () => {
                 }
             </Breadcrumbs>
             <Box>
-                <Button>Create Service</Button>
-                <Button>Create Flow</Button>
+                { !isFlow && <Button onClick={handleCreateServiceModalOpen}>Create Service</Button>}
+                { !isFlow && <Button onClick={handleCreateFlowModalOpen}>Create Flow</Button> }
             </Box>
+            <ModalCreateService open={isCreateServiceModalOpen} onClose={handleCreateServiceModalClose} onFormSubmit={handleCreateService}/>
+            <ModalCreateFlow open={isCreateFlowModalOpen} onClose={handleCreateFlowModalClose} onFormSubmit={handleCreateFlow}/>
         </Box>
         <Box>
             {isFlow && <SubFlowEditor />}
