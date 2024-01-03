@@ -3,7 +3,6 @@ import {GlobalContext} from "./GlobalContext";
 import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/SideBar/SideBar";
 import EntitiesEditor from "./components/EntitiesEditor/EntitiesEditor";
-import FlowEditor from "./components/FlowEditor/FlowEditor";
 import ComingSoon from "./components/ComingSoon/ComingSoon";
 import './App.css';
 import ServiceEditor from "./components/ServiceEditor/ServiceEditor";
@@ -11,7 +10,7 @@ import DatabaseConfig from "./components/DatabaseConfig/DatabaseConfig";
 
 
 const MainPage = () => {
-    const { user, currentSection } = useContext(GlobalContext);
+    const {currentSection } = useContext(GlobalContext);
 
     return (
         <div className="app-container">

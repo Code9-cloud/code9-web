@@ -79,7 +79,7 @@ const ServiceEditor = () => {
     return <div className={"service-editor"} style={{width: '100%', height: '100%', display: "flex", flexDirection: "column"}}>
         <Box display={'flex'} alignContent={'center'} justifyContent={'space-between'} style={{padding: '10px'}}>
             <Breadcrumbs>
-                <Chip icon={<Home />} key={0} onClick={navigateToServicePathIndex(0)}/>
+                <Chip icon={<Home />} key={0} label={"Home"} onClick={navigateToServicePathIndex(0)}/>
                 {
                     currentServicePath.map((service: string, index: number) => {
                         return <Chip key={index+1} label={service} onClick={navigateToServicePathIndex(index + 1)}/>

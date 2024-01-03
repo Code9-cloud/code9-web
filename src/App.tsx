@@ -1,13 +1,8 @@
 import React, {useContext} from 'react';
 import {GlobalContext} from "./GlobalContext";
-import Navbar from "./components/Navbar/Navbar";
-import Sidebar from "./components/SideBar/SideBar";
-import EntitiesEditor from "./components/EntitiesEditor/EntitiesEditor";
-import FlowEditor from "./components/FlowEditor/FlowEditor";
-import ComingSoon from "./components/ComingSoon/ComingSoon";
 import SignIn from "./components/SignIn/SignIn";
 import './App.css';
-import {Routes, Route, useNavigate} from 'react-router';
+import {Routes, Route} from 'react-router';
 import SignUp from './components/SignUp/SingUp';
 import LandingPage from './components/LandingPage/LandingPage';
 import MainPage from './MainPage';
@@ -15,7 +10,7 @@ import Onboarding1 from './components/Onboarding/Onboarding1';
 import Onboarding2 from './components/Onboarding/Onboarding2';
 
 function App() {
-    const { user, currentSection } = useContext(GlobalContext);
+    const { user } = useContext(GlobalContext);
 
 
     return (
