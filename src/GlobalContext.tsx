@@ -138,7 +138,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
                             isSensitive: false,
                         }
                     },
-                    position: {x: 0, y: 0},
+                    position: {x: 200, y: 200},
                 },
                 restaurant: {
                     name: 'Restaurant',
@@ -167,7 +167,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
                             isSensitive: false,
                         }
                     },
-                    position: {x: 300, y: 0},
+                    position: {x: 500, y: 200},
                 }
             },
             services: {

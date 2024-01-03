@@ -5,7 +5,7 @@ import ReactFlow, {
     MiniMap,
     ReactFlowInstance,
     useEdgesState,
-    useNodesState
+    useNodesState, XYPosition
 } from "reactflow";
 import React, {useCallback, useState} from "react";
 import {GlobalContext} from "../../GlobalContext";
@@ -105,6 +105,78 @@ const SubFlowEditor = () => {
         setReactFlowInstance(reactFlowInstance);
     };
 
+    const createTriggerNode = (viewportPoint: XYPosition) => {
+        const newNode = {
+            id: 'node_' + Math.random(),
+            type: 'triggerNode',
+            data: { label: 'Trigger Node', selected: false },
+            position: viewportPoint,
+            // other node properties
+        };
+
+        setNodes((nds) => {
+            let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
+            if(idx > -1) {
+                nds.splice(idx, 1);
+            }
+            return nds.concat(newNode);
+        });
+    }
+
+    const createMethodInvokeNode = (viewportPoint: XYPosition) => {
+        const newNode = {
+            id: 'node_' + Math.random(),
+            type: 'methodInvokeNode',
+            data: { label: 'Method Invoke Node', selected: false },
+            position: viewportPoint,
+            // other node properties
+        };
+
+        setNodes((nds) => {
+            let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
+            if(idx > -1) {
+                nds.splice(idx, 1);
+            }
+            return nds.concat(newNode);
+        });
+    }
+
+    const createCodeBlockNode = (viewportPoint: XYPosition) => {
+        const newNode = {
+            id: 'node_' + Math.random(),
+            type: 'codeBlockNode',
+            data: { label: 'Code Block Node', selected: false },
+            position: viewportPoint,
+            // other node properties
+        };
+
+        setNodes((nds) => {
+            let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
+            if(idx > -1) {
+                nds.splice(idx, 1);
+            }
+            return nds.concat(newNode);
+        });
+    }
+
+    const createResponseNode = (viewportPoint: XYPosition) => {
+        const newNode = {
+            id: 'node_' + Math.random(),
+            type: 'responseNode',
+            data: { label: 'Response Node', selected: false },
+            position: viewportPoint,
+            // other node properties
+        };
+
+        setNodes((nds) => {
+            let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
+            if(idx > -1) {
+                nds.splice(idx, 1);
+            }
+            return nds.concat(newNode);
+        });
+    }
+
     const onPaneContextMenu = (event: any) => {
         event.preventDefault();
 
@@ -117,86 +189,14 @@ const SubFlowEditor = () => {
         const viewportPoint = reactFlowInstance.screenToFlowPosition({ x: event.clientX, y: event.clientY});
         setLastActionPosition(viewportPoint);
 
-        const createTriggerNode = () => {
-            const newNode = {
-                id: 'node_' + Math.random(),
-                type: 'triggerNode',
-                data: { label: 'Trigger Node', selected: false },
-                position: viewportPoint,
-                // other node properties
-            };
-
-            setNodes((nds) => {
-                let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
-                if(idx > -1) {
-                    nds.splice(idx, 1);
-                }
-                return nds.concat(newNode);
-            });
-        }
-
-        const createMethodInvokeNode = () => {
-            const newNode = {
-                id: 'node_' + Math.random(),
-                type: 'methodInvokeNode',
-                data: { label: 'Method Invoke Node', selected: false },
-                position: viewportPoint,
-                // other node properties
-            };
-
-            setNodes((nds) => {
-                let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
-                if(idx > -1) {
-                    nds.splice(idx, 1);
-                }
-                return nds.concat(newNode);
-            });
-        }
-
-        const createCodeBlockNode = () => {
-            const newNode = {
-                id: 'node_' + Math.random(),
-                type: 'codeBlockNode',
-                data: { label: 'Code Block Node', selected: false },
-                position: viewportPoint,
-                // other node properties
-            };
-
-            setNodes((nds) => {
-                let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
-                if(idx > -1) {
-                    nds.splice(idx, 1);
-                }
-                return nds.concat(newNode);
-            });
-        }
-
-        const createResponseNode = () => {
-            const newNode = {
-                id: 'node_' + Math.random(),
-                type: 'responseNode',
-                data: { label: 'Response Node', selected: false },
-                position: viewportPoint,
-                // other node properties
-            };
-
-            setNodes((nds) => {
-                let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
-                if(idx > -1) {
-                    nds.splice(idx, 1);
-                }
-                return nds.concat(newNode);
-            });
-        }
-
         const newNode = {
             id: 'context-menu', // or any unique ID
             type: 'contextMenuNode',
             data: { label: 'Context Menu Node', items: [
-                {key: 'create-trigger', icon: <LibraryAdd />, text: 'Add Trigger Node', onClick: () => { createTriggerNode(); closeContextMenu(); }},
-                {key: 'create-code-block-node', icon: <LibraryAdd />, text: 'Code Block', onClick: () => { createCodeBlockNode(); closeContextMenu(); }},
-                // {key: 'create-method-invoke', icon: <LibraryAdd />, text: 'Invoke Method', onClick: () => { createMethodInvokeNode(); closeContextMenu(); }},
-                {key: 'create-response', icon: <LibraryAdd />, text: 'Add Response Node', onClick: () => { createResponseNode(); closeContextMenu(); }},
+                {key: 'create-trigger', icon: <LibraryAdd />, text: 'Add Trigger Node', onClick: () => { createTriggerNode(viewportPoint); closeContextMenu(); }},
+                {key: 'create-code-block-node', icon: <LibraryAdd />, text: 'Code Block', onClick: () => { createCodeBlockNode(viewportPoint); closeContextMenu(); }},
+                // {key: 'create-method-invoke', icon: <LibraryAdd />, text: 'Invoke Method', onClick: () => { createMethodInvokeNode(viewportPoint); closeContextMenu(); }},
+                {key: 'create-response', icon: <LibraryAdd />, text: 'Add Response Node', onClick: () => { createResponseNode(viewportPoint); closeContextMenu(); }},
                 ] },
             position: viewportPoint,
             // other node properties
@@ -230,10 +230,10 @@ const SubFlowEditor = () => {
                             onConnect={onConnect}
                             onInit={onInit}
                             onPaneContextMenu={onPaneContextMenu}
-                            fitView
                             proOptions={proOptions}
                             nodeTypes={nodeTypes}
                             maxZoom={1}
+                            defaultViewport={{x:0, y:0, zoom: 1}}
                         >
                             <MiniMap style={minimapStyle} zoomable pannable/>
                             <Controls/>
