@@ -4,6 +4,7 @@ import {GlobalContext} from "../../GlobalContext";
 import {Box, Button, IconButton, TextField, Typography} from "@mui/material";
 import {Edit as EditIcon, Save as SaveIcon, Delete as DeleteIcon} from "@mui/icons-material";
 import EditableEntityAttributeSidebar from "./EditableEntityAttributeSidebar";
+import AddIcon from '@mui/icons-material/Add';
 
 const EntitySidebar : React.FC<{selectedEntity: string|null, isCollapsed: boolean}> = ({selectedEntity, isCollapsed}) => {
     const {application} = React.useContext(GlobalContext);
@@ -50,7 +51,7 @@ const EntitySidebar : React.FC<{selectedEntity: string|null, isCollapsed: boolea
                         </Box>
                     </div>
                     <br />
-                    <div className="entity-edit-sidebar-attributes">
+                    <div className="entity-edit-sidebar-attributes" style={{borderBottom: "1px solid gray", margin: "0 15px"}}>
                         { Object.values(entity.attributes).map((attribute: any) => (
                             <div className="entity-edit-sidebar-attribute" key={attribute.id}>
                                 <EditableEntityAttributeSidebar data={attribute} isEditing={isEditing} />
@@ -58,9 +59,10 @@ const EntitySidebar : React.FC<{selectedEntity: string|null, isCollapsed: boolea
                             </div>
                         ))}
                     </div>
+                    <br />
                     {isEditing && (
-                        <Button variant="contained" color="primary" onClick={() => {/* logic to add a new attribute */}}>
-                            + Add Attribute
+                        <Button style={{color: "white", margin: '0 auto', display: "flex", width: "90%",textTransform: "none", backgroundColor: '#22212D'}} variant="contained" color="primary" onClick={() => {/* logic to add a new attribute */}}>
+                            <AddIcon style={{fontSize: "18px",color: "#8866EE"}} /> &ensp;  Add Attribute
                         </Button>
                     )}
                 </div>)

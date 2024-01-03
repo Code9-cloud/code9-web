@@ -94,7 +94,8 @@ function ModalCreateEntity({open, onClose, onFormSubmit}: any){
                         fullWidth
                         margin="normal"
                     >
-                        <MenuItem value="string">String</MenuItem>
+                    
+                        <MenuItem value="string"> <CloseIcon /> String</MenuItem>
                         <MenuItem value="number">Number</MenuItem>
                     </TextField>
                     <Box marginTop={2} display="flex" justifyContent="flex-end">

@@ -84,7 +84,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
                         },
                         table_number: {
                             name: 'Table Number',
-                            type: 'int',
+                            type: 'number',
                             id: 'table_number',
                             isRequired: true,
                             isIndexed: false,
