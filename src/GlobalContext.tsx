@@ -39,6 +39,12 @@ type ApplicationType = {
     entities: Record<string,EntityType>;
     services: Record<string, ServiceType>;
     flows: Record<string, FlowType>;
+    database?: {
+        url: string;
+        name: string;
+        username?: string;
+        password?: string;
+    };
 };
 
 type UserType = {

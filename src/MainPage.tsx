@@ -7,23 +7,12 @@ import FlowEditor from "./components/FlowEditor/FlowEditor";
 import ComingSoon from "./components/ComingSoon/ComingSoon";
 import './App.css';
 import ServiceEditor from "./components/ServiceEditor/ServiceEditor";
+import DatabaseConfig from "./components/DatabaseConfig/DatabaseConfig";
 
 
 const MainPage = () => {
     const { user, currentSection } = useContext(GlobalContext);
 
-    const renderSection = () => {
-        switch (currentSection) {
-            case 'Entities':
-                return <EntitiesEditor />;
-            case 'Services':
-                return <FlowEditor />;
-            case 'Deploy':
-                return <ComingSoon />;
-            default:
-                return <div>Select a section</div>;
-        }
-    };
     return (
         <div className="app-container">
             <Navbar />
@@ -32,6 +21,7 @@ const MainPage = () => {
                 <div className="main-content">
                     {currentSection === 'Entities' && <EntitiesEditor />}
                     {currentSection === 'Services' && <ServiceEditor />}
+                    {currentSection === 'Database' && <DatabaseConfig />}
                     {currentSection === 'Deploy' && <ComingSoon />}
                 </div>
             </div>

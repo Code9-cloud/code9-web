@@ -17,18 +17,7 @@ import Onboarding2 from './components/Onboarding/Onboarding2';
 function App() {
     const { user, currentSection } = useContext(GlobalContext);
 
-    const renderSection = () => {
-        switch (currentSection) {
-            case 'Entities':
-                return <EntitiesEditor />;
-            case 'Services':
-                return <FlowEditor />;
-            case 'Deploy':
-                return <ComingSoon />;
-            default:
-                return <div>Select a section</div>;
-        }
-    };
+
     return (
         <div className="app-container">
             { !user ? (

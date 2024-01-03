@@ -5,7 +5,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { GlobalContext } from '../../GlobalContext';
 import {ListItemButton, SvgIcon} from "@mui/material";
-import {Api as ApiIcon, Category as CategoryIcon, RocketLaunch as RocketLaunchIcon} from "@mui/icons-material";
+import {Api as ApiIcon, Category as CategoryIcon, RocketLaunch as RocketLaunchIcon, Storage} from "@mui/icons-material";
 
 
 
@@ -13,11 +13,12 @@ const Sidebar: React.FC = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const { currentSection, setSection } = useContext(GlobalContext);
 
-    const sections = ['Entities', 'Services', 'Deploy'];
+    const sections = ['Entities', 'Services', 'Database', 'Deploy'];
     const section_icons : any = {
         'Entities': <CategoryIcon />,
         'Services': <ApiIcon />,
         'Deploy': <RocketLaunchIcon />,
+        'Database': <Storage />
     }
 
     return (
