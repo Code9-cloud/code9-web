@@ -2,7 +2,7 @@ import React from "react";
 import './EntitySidebar.css';
 import {GlobalContext} from "../../GlobalContext";
 import {Box, Button, IconButton, TextField, Typography} from "@mui/material";
-import {Edit as EditIcon, Save as SaveIcon, Delete as DeleteIcon} from "@mui/icons-material";
+import {Edit as EditIcon, Save as SaveIcon, Delete as DeleteIcon, Add} from "@mui/icons-material";
 import EditableEntityAttributeSidebar from "./EditableEntityAttributeSidebar";
 import ModalAddAttribute from "../ModalAddAttribute/ModalAddAttribute";
 
@@ -66,48 +66,42 @@ const EntitySidebar : React.FC<{selectedEntity: string|null, isCollapsed: boolea
         setAttribute(selectedEntity, attributeId, updatedAttribute);
     }
 
-    return (
+    return ( entity ? (
         <div className={`entity-editor-sidebar ${isCollapsed ? 'collapsed' : ''}`}>
-            { !entity && (<div>
-                Selected Entity Details will show up here
-            </div>) }
-            {
-                entity && (<div>
-                    <div className="entity-edit-sidebar-header">
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                // padding: '5px 10px',
-                                // Add additional styling as needed
-                            }}
-                        >
-                            { !isEditing && <Typography variant={"h5"}>{entity.name}</Typography> }
-                            { isEditing && <TextField value={entity.name} onChange={(event) => { changeEntityName(selectedEntity ? selectedEntity : '', event.target.value); }} /> }
-                            {/*{ isEditing && (<IconButton onClick={handleDiscardClick}><DeleteIcon /></IconButton>)}*/}
-                            <IconButton onClick={isEditing ? handleSaveClick : handleEditClick}>
-                                {isEditing ? <SaveIcon /> : <EditIcon />}
-                            </IconButton>
-                        </Box>
-                    </div>
-                    <div className="entity-edit-sidebar-attributes">
-                        { Object.values(entity.attributes).map((attribute: any) => (
-                            <div className="entity-edit-sidebar-attribute" key={attribute.id}>
-                                <EditableEntityAttributeSidebar data={attribute} selectedEntityId={selectedEntity} isEditing={isEditing} onChange={handleAttributeUpdate}/>
-                            </div>
-                        ))}
-                    </div>
-                    {isEditing && (
-                        <Button variant="contained" color="primary" onClick={() => { setAddAttributeModalOpen(true); }}>
-                            + Add Attribute
-                        </Button>
-                    )}
-                    <ModalAddAttribute open={addAttributeModalOpen} onClose={() => { setAddAttributeModalOpen(false); }} onFormSubmit={addAttribute} currentEntityId={selectedEntity}/>
-                </div>)
-            }
-        </div>
-    );
+            <Box
+                className="entity-editor-sidebar-header"
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0px 10px',
+                    // padding: '5px 10px',
+                    // Add additional styling as needed
+                }}
+            >
+                { !isEditing && <Typography style={{fontSize: "24px", fontFamily: "Plus Jakarta Sans" }} variant={"h5"}>{entity.name}</Typography> }
+                { isEditing && <TextField inputProps={{style: {padding: '3px', fontSize: "20px"}}} value={entity.name} onChange={(event) => { changeEntityName(selectedEntity ? selectedEntity : '', event.target.value); }} /> }
+                {/*{ isEditing && (<IconButton onClick={handleDiscardClick}><DeleteIcon /></IconButton>)}*/}
+                <IconButton onClick={isEditing ? handleSaveClick : handleEditClick}>
+                    {isEditing ? <SaveIcon /> : <EditIcon />}
+                </IconButton>
+            </Box>
+            <Box className="entity-edit-sidebar-attributes" style={{padding: "10px 10px", display: "flex", flexDirection: "column"}}>
+                { Object.values(entity.attributes).map((attribute: any) => (
+                    <Box className="entity-editor-sidebar-attribute" key={attribute.id}>
+                        <EditableEntityAttributeSidebar data={attribute} selectedEntityId={selectedEntity} isEditing={isEditing} onChange={handleAttributeUpdate}/>
+                    </Box>
+                ))}
+            </Box>
+            {isEditing && (
+                <Box>
+                    <Button style={{color: "white", margin: '10px auto', display: "flex", width: "90%",textTransform: "none", backgroundColor: '#22212D'}}  variant="contained" color="primary" onClick={() => { setAddAttributeModalOpen(true); }}>
+                        <Add style={{fontSize: "18px",color: "#8866EE"}} /> &ensp;  Add Attribute
+                    </Button>
+                </Box>
+            )}
+            <ModalAddAttribute open={addAttributeModalOpen} onClose={() => { setAddAttributeModalOpen(false); }} onFormSubmit={addAttribute} currentEntityId={selectedEntity}/>
+        </div>) : <div className={`entity-editor-sidebar ${isCollapsed ? 'collapsed' : ''}`} />);
 }
 
 export default EntitySidebar;

@@ -1,3 +1,15 @@
 .entity-editor-sidebar.collapsed{
     display: none;
 }
+
+.entity-editor-sidebar {
+    font-family: 'Plus Jakarta Sans';
+    display: flex;
+    flex-direction: column;
+}
+
+.entity-editor-sidebar-header {
+    /* border: 1px solid blue;  */
+    font-weight: 600;
+    height: 45px;
+}

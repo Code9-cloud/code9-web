@@ -3,6 +3,9 @@ import {ArrowDropDown, ArrowDropUp, Key as KeyIcon} from "@mui/icons-material";
 import React from "react";
 import {GlobalContext} from "../../GlobalContext";
 import CodeStyledTextField from "../CodeStyled/CodeStyledTextField";
+import CodeStyledTypography from "../CodeStyled/CodeStyledTypography";
+import CodeStyledMenuItem from "../CodeStyled/CodeStyledMenuItem";
+import CodeStyledSelect from "../CodeStyled/CodeStyledSelect";
 
 function EditableEntityAttributeSidebar( {data, selectedEntityId, isEditing, onChange} : any) {
     const { application } = React.useContext(GlobalContext);
@@ -19,12 +22,15 @@ function EditableEntityAttributeSidebar( {data, selectedEntityId, isEditing, onC
 
     return (
         <>
-            <div style={{padding: isCollapsed ? '5px 10px' : '5px 10px 0px', borderTop: '1px solid #2B2B38'}}>
+            <div style={{padding: isCollapsed ? '5px 0px' : '5px 0px'}}>
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        backgroundColor: '#2A2A4D',
+                        borderRadius: '5px',
+                        padding: '5px 0px',
                         // padding: '5px 10px',
                         // Add additional styling as needed
                     }}
@@ -35,108 +41,115 @@ function EditableEntityAttributeSidebar( {data, selectedEntityId, isEditing, onC
                             alignItems: 'left',
                             justifyContent: 'space-between',
                         }}>
-                        {data.isPrimary && <KeyIcon />}
-                        {!isEditing && (<Typography variant="body2">{data.name}</Typography>)}
-                        {isEditing && (<CodeStyledTextField value={attributeCopy.name} onChange={(event) => { handleChange({...attributeCopy, name: event.target.value})}} />)}
+                        {/*{data.isPrimary && <KeyIcon />}*/}
+                        {!isEditing && (<CodeStyledTypography style={{fontSize: "18px", marginLeft: "5px", padding: "0", height: "25px"}} variant="body2">{data.name}</CodeStyledTypography>)}
+                        {isEditing && (<CodeStyledTextField style={{paddingLeft: "5px"}} inputProps={{style: {fontSize: "16px", marginLeft: "5px", padding: "0", height: "25px"}}}  value={attributeCopy.name} onChange={(event) => { handleChange({...attributeCopy, name: event.target.value})}} />)}
                     </Box>
                     <IconButton onClick={toggleCollapse} style={{padding:'0'}} size={"small"} disableRipple={true}>{ isCollapsed ? <ArrowDropDown fontSize={"small"} /> : <ArrowDropUp fontSize={"small"}/> } {/* Replace with your chosen icon */}
                     </IconButton>
                 </Box>
             </div>
-            { !isCollapsed && <div style={{padding: '5px 10px 5px', backgroundColor: '#2A2A4D'}}>
+            { !isCollapsed && <div style={{padding: '5px 10px 5px', display: "flex", flexDirection: "column"}}>
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                     }}>
-                    <Typography variant="caption">ID</Typography>
-                    <Typography variant="caption">{data.id}</Typography>
+                    <CodeStyledTypography variant="caption">ID</CodeStyledTypography>
+                    <CodeStyledTypography variant="caption">{data.id}</CodeStyledTypography>
                 </Box>
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        paddingTop: '5px',
                     }}>
-                    <Typography variant="caption">type</Typography>
-                    { !isEditing && <Typography variant="caption">{data.type}</Typography> }
-                    { isEditing && <TextField select value={attributeCopy.type} onChange={(event) => { handleChange({...attributeCopy, type: event.target.value})}}>
-                        <MenuItem value="string">String</MenuItem>
-                        <MenuItem value="number">Number</MenuItem>
-                        {!data.isPrimary && <MenuItem value="boolean">Boolean</MenuItem>}
-                        {!data.isPrimary && <MenuItem value="entity_ref">EntityRef</MenuItem>}
-                        {!data.isPrimary && <MenuItem value="attribute_ref">AttributeRef</MenuItem>}
-                    </TextField> }
+                    <CodeStyledTypography variant="caption">type</CodeStyledTypography>
+                    { !isEditing && <CodeStyledTypography variant="caption">{data.type}</CodeStyledTypography> }
+                    { isEditing && <CodeStyledSelect value={attributeCopy.type} onChange={(event) => { handleChange({...attributeCopy, type: event.target.value})}}>
+                        <CodeStyledMenuItem value="string">String</CodeStyledMenuItem>
+                        <CodeStyledMenuItem value="number">Number</CodeStyledMenuItem>
+                        {!data.isPrimary && <CodeStyledMenuItem value="boolean">Boolean</CodeStyledMenuItem>}
+                        {!data.isPrimary && <CodeStyledMenuItem value="entity_ref">EntityRef</CodeStyledMenuItem>}
+                        {!data.isPrimary && <CodeStyledMenuItem value="attribute_ref">AttributeRef</CodeStyledMenuItem>}
+                    </CodeStyledSelect> }
                 </Box>
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        paddingTop: (attributeCopy.type === 'entity_ref' || attributeCopy.type === 'attribute_ref') ? '5px' : '0px',
                     }}>
+                    { (attributeCopy.type === 'entity_ref' || attributeCopy.type === 'attribute_ref') &&
+                        <CodeStyledTypography variant="caption">Entity</CodeStyledTypography> }
                     { !isEditing && (attributeCopy.type === 'entity_ref' || attributeCopy.type === 'attribute_ref') &&
-                        <Typography variant="caption">Reference Entity</Typography> }
-                    { !isEditing && (attributeCopy.type === 'entity_ref' || attributeCopy.type === 'attribute_ref') &&
-                        <Typography variant="caption">{attributeCopy.referenceEntityId}</Typography>
+                        <CodeStyledTypography variant="caption">{attributeCopy.referenceEntityId}</CodeStyledTypography>
                     }
                     { isEditing && (attributeCopy.type === 'entity_ref' || attributeCopy.type === 'attribute_ref') &&
-                        <TextField
-                            select
+                        <CodeStyledSelect
                             label="Reference Entity"
                             name="referenceEntityId"
                             value={attributeCopy.referenceEntityId ? attributeCopy.referenceEntityId : ''}
                             onChange={(event) => { handleChange({...attributeCopy, referenceEntityId: event.target.value})}}
-                            fullWidth
-                            margin="normal">
+                            fullWidth>
                             { Object.values(application ? Object.values(application.entities).filter((et) => { return et.id !== selectedEntityId}) : []).map((et) => {
-                                return (<MenuItem value={et.id} key={et.id}>{et.name}</MenuItem>)
+                                return (<CodeStyledMenuItem value={et.id} key={et.id}>{et.name}</CodeStyledMenuItem>)
                             }) }
-                        </TextField>}
+                        </CodeStyledSelect>}
                 </Box>
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        paddingTop: (attributeCopy.type === 'attribute_ref' && attributeCopy.referenceEntityId) ? '5px' : '0px',
                     }}>
+                    { (attributeCopy.type === 'attribute_ref' && attributeCopy.referenceEntityId) &&
+                        <CodeStyledTypography variant="caption">Attribute</CodeStyledTypography> }
                     { !isEditing && (attributeCopy.type === 'attribute_ref' && attributeCopy.referenceEntityId) &&
-                        <Typography variant="caption">Reference Attribute</Typography> }
-                    { !isEditing && (attributeCopy.type === 'attribute_ref' && attributeCopy.referenceEntityId) &&
-                        <Typography variant="caption">{attributeCopy.referenceAttributeId}</Typography> }
+                        <CodeStyledTypography variant="caption">{attributeCopy.referenceAttributeId}</CodeStyledTypography> }
                     { isEditing && (attributeCopy.type === 'attribute_ref' && attributeCopy.referenceEntityId) &&
-                        <TextField
-                            select
+                        <CodeStyledSelect
                             label="Reference Attribute"
                             name="referenceAttributeId"
                             value={attributeCopy.referenceAttributeId ? attributeCopy.referenceAttributeId : ''}
                             onChange={(event) => { handleChange({...attributeCopy, referenceAttributeId: event.target.value})}}
-                            fullWidth
-                            margin="normal">
+                            fullWidth>
                             { Object.values(application && application.entities[attributeCopy.referenceEntityId] ? Object.values(application.entities[attributeCopy.referenceEntityId].attributes) : []).map((at) => {
-                                return (<MenuItem value={at.id} key={at.id}>{at.name}</MenuItem>)
+                                return (<CodeStyledMenuItem value={at.id} key={at.id}>{at.name}</CodeStyledMenuItem>)
                             }) }
-                        </TextField>}
+                        </CodeStyledSelect>}
                 </Box>
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        paddingTop: '5px',
                     }}>
-                    <Typography variant="caption">Required</Typography>
-                    { !isEditing && <Typography variant="caption">{data.isRequired ? 'true' : 'false'}</Typography> }
-                    { isEditing && <input type="checkbox" checked={attributeCopy.isRequired} onChange={(event) => { handleChange({...attributeCopy, isRequired: event.target.checked})}} /> }
+                    <CodeStyledTypography variant="caption">Required</CodeStyledTypography>
+                    { !isEditing && <CodeStyledTypography variant="caption">{data.isRequired ? 'true' : 'false'}</CodeStyledTypography> }
+                    { isEditing && <CodeStyledSelect value={data.isRequired ? 'true' : 'false'} onChange={(event) => { handleChange({...attributeCopy, isRequired: (event.target.value === "true")})}}>
+                        <CodeStyledMenuItem value="true"><span>true</span> &ensp;</CodeStyledMenuItem>
+                        <CodeStyledMenuItem value="false"><span>false</span> &ensp;</CodeStyledMenuItem>
+                    </CodeStyledSelect> }
                 </Box>
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        paddingTop: '5px',
                     }}>
-                    <Typography variant="caption">Unique</Typography>
-                    { !isEditing && <Typography variant="caption">{data.isUnique ? 'true' : 'false'}</Typography> }
-                    { isEditing && <input type="checkbox" checked={attributeCopy.isUnique} onChange={(event) => { handleChange({...attributeCopy, isUnique: event.target.checked})}} /> }
+                    <CodeStyledTypography variant="caption">Unique</CodeStyledTypography>
+                    { !isEditing && <CodeStyledTypography variant="caption">{data.isUnique ? 'true' : 'false'}</CodeStyledTypography> }
+                    { isEditing && <CodeStyledSelect value={data.isUnique ? 'true' : 'false'} onChange={(event) => { handleChange({...attributeCopy, isUnique: (event.target.value === "true")})}}>
+                            <CodeStyledMenuItem value="true"><span>true</span> &ensp;</CodeStyledMenuItem>
+                            <CodeStyledMenuItem value="false"><span>false</span> &ensp;</CodeStyledMenuItem>
+                        </CodeStyledSelect>}
                 </Box>
             </div> }
         </>);
