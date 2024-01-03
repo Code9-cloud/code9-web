@@ -75,14 +75,105 @@ type GlobalProviderProps = {
     children: ReactNode;
 };
 
+const testApplication: ApplicationType = {
+    name: 'TestPOS',
+    entities: {
+        table: {
+            name: 'Table',
+            id: 'table',
+            attributes: {
+                table_id: {
+                    name: 'Table Id',
+                    type: 'string',
+                    id: 'table_id',
+                    isPrimary: true,
+                    isRequired: true,
+                    isIndexed: false,
+                    isUnique: false,
+                    isImmutable: false,
+                    isSensitive: false,
+                },
+                table_number: {
+                    name: 'Table Number',
+                    type: 'number',
+                    id: 'table_number',
+                    isRequired: true,
+                    isIndexed: false,
+                    isUnique: false,
+                    isImmutable: false,
+                    isSensitive: false,
+                },
+                restaurant_id: {
+                    name: 'Restaurant Id',
+                    type: 'string',
+                    id: 'restaurant_id',
+                    isRequired: true,
+                    isIndexed: false,
+                    isUnique: false,
+                    isImmutable: false,
+                    isSensitive: false,
+                }
+            },
+            position: {x: 200, y: 200},
+        },
+        restaurant: {
+            name: 'Restaurant',
+            id: 'restaurant',
+            attributes: {
+                restaurant_id: {
+                    name: 'Restaurant Id',
+                    type: 'string',
+                    id: 'restaurant_id',
+                    isPrimary: true,
+                    isRequired: true,
+                    isIndexed: true,
+                    isUnique: true,
+                    isImmutable: true,
+                    isSensitive: true,
+                },
+                tables: {
+                    name: 'Tables',
+                    type: 'entity_ref',
+                    referenceEntityId: 'table',
+                    id: 'tables',
+                    isRequired: true,
+                    isIndexed: false,
+                    isUnique: false,
+                    isImmutable: false,
+                    isSensitive: false,
+                }
+            },
+            position: {x: 500, y: 200},
+        }
+    },
+    services: {
+        'auth': {
+            name: 'Authentication',
+            id: 'auth',
+            services: {
+            },
+            flows: {
+            }
+        }
+    },
+    flows: {
+        'test': {
+            name: 'Test Flow',
+            id: 'test',
+        }
+    }
+};
+
+const emptyApplication: ApplicationType = {
+    name: '',
+    entities: {},
+    services: {},
+    flows: {}
+};
+
 export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     const [user, setUser] = useState<UserType>(null);
-    const [application, setApplication] = useState<ApplicationType>({
-        name: '',
-        entities: {},
-        services: {},
-        flows: {}
-    });
+    const [application, setApplication] = useState<ApplicationType>(testApplication);
     const [currentSection, setCurrentSection] = useState('Entities');
     const [currentServicePath, setCurrentServicePath] = useState<string[]>([]);
 
@@ -99,94 +190,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     }
 
     const loadApplication = () => {
-        setApplication({
-            name: 'TestPOS',
-            entities: {
-                table: {
-                    name: 'Table',
-                    id: 'table',
-                    attributes: {
-                        table_id: {
-                            name: 'Table Id',
-                            type: 'string',
-                            id: 'table_id',
-                            isPrimary: true,
-                            isRequired: true,
-                            isIndexed: false,
-                            isUnique: false,
-                            isImmutable: false,
-                            isSensitive: false,
-                        },
-                        table_number: {
-                            name: 'Table Number',
-                            type: 'number',
-                            id: 'table_number',
-                            isRequired: true,
-                            isIndexed: false,
-                            isUnique: false,
-                            isImmutable: false,
-                            isSensitive: false,
-                        },
-                        restaurant_id: {
-                            name: 'Restaurant Id',
-                            type: 'string',
-                            id: 'restaurant_id',
-                            isRequired: true,
-                            isIndexed: false,
-                            isUnique: false,
-                            isImmutable: false,
-                            isSensitive: false,
-                        }
-                    },
-                    position: {x: 200, y: 200},
-                },
-                restaurant: {
-                    name: 'Restaurant',
-                    id: 'restaurant',
-                    attributes: {
-                        restaurant_id: {
-                            name: 'Restaurant Id',
-                            type: 'string',
-                            id: 'restaurant_id',
-                            isPrimary: true,
-                            isRequired: true,
-                            isIndexed: true,
-                            isUnique: true,
-                            isImmutable: true,
-                            isSensitive: true,
-                        },
-                        tables: {
-                            name: 'Tables',
-                            type: 'entity_ref',
-                            referenceEntityId: 'table',
-                            id: 'tables',
-                            isRequired: true,
-                            isIndexed: false,
-                            isUnique: false,
-                            isImmutable: false,
-                            isSensitive: false,
-                        }
-                    },
-                    position: {x: 500, y: 200},
-                }
-            },
-            services: {
-                'auth': {
-                    name: 'Authentication',
-                    id: 'auth',
-                    services: {
-                    },
-                    flows: {
-                    }
-                }
-            },
-            flows: {
-                'test': {
-                    name: 'Test Flow',
-                    id: 'test',
-                }
-            }
-        });
+        setApplication(testApplication);
     }
 
     const addEntityToApplication = (entity: EntityType) => {

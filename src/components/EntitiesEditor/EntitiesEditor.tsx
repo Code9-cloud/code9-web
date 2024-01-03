@@ -294,7 +294,7 @@ const EntitiesEditor = () => {
                             onPaneContextMenu={onPaneContextMenu}
                             proOptions={proOptions}
                             nodeTypes={nodeTypes}
-                            maxZoom={1}
+                            maxZoom={1.5}
                             defaultViewport={{x:0, y:0, zoom: 1}}
                         >
                         <MiniMap style={minimapStyle} zoomable pannable/>
