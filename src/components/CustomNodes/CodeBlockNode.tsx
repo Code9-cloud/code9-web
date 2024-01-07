@@ -21,15 +21,15 @@ const CodeBlockNode = ({data}: any) => {
         // TODO: Update code in parent
     }
 
-    return <div className={"code-block-node"}>
-        <NodeResizeControl style={{
+    return <div className={`code-block-node ${isMinimised ? 'minimised' : ''}`}>
+        { !isMinimised && <NodeResizeControl style={{
             background: 'transparent',
             border: 'none',
             right: 0,
             bottom: 0,
         }}>
             <SouthEast style={{right: '2px', bottom: '2px', position: 'absolute', height: '15px', width: '15px', color: '#2B2B38'}} />
-        </NodeResizeControl>
+        </NodeResizeControl> }
         <FlowNodeHeader isMinimised={isMinimised} onMinimiseClicked={toggleMinimise} icon={<Terminal />} title={"Code Block"} onDeleteClicked={() => { console.log("Delete");} }/>
         <Handle type={"target"} id="in" position={Position.Left} />
         <div className={`code-block-node__body ${isMinimised ? 'minimised' : ''}`}>
