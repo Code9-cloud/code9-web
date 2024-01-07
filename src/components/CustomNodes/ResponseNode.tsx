@@ -1,18 +1,19 @@
-import {Box, Card, Typography} from "@mui/material";
-import {TaskAlt} from "@mui/icons-material";
+import {Reply} from "@mui/icons-material";
 import {Handle, Position} from "reactflow";
 import './ResponseNode.css';
+import FlowNodeHeader from "./FlowNodeHeader";
+import React from "react";
 
 const ResponseNode = ({data}: any) => {
-    return <Card className={"response-node"}>
-        <Box>
-            <TaskAlt fontSize={"large"}/>
-        </Box>
-        <Box>
-            <Typography variant={"body1"}>Done</Typography>
-        </Box>
+    const [isMinimised, setIsMinimised] = React.useState<boolean>(false);
+    const toggleMinimise = (ev:any) => {
+        ev.stopPropagation();
+        setIsMinimised(!isMinimised);
+    }
+    return <div className={"response-node"}>
+        <FlowNodeHeader isMinimised={isMinimised} onMinimiseClicked={toggleMinimise} icon={<Reply />} title={"Send Response"} onDeleteClicked={() => { console.log("Delete");} }/>
         <Handle type={"target"} position={Position.Left} />
-    </Card>;
+    </div>;
 }
 
 export default ResponseNode;

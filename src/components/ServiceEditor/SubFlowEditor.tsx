@@ -14,7 +14,7 @@ import ContextMenuNode from "../CustomNodes/ContextMenuNode";
 import TriggerNode from "../CustomNodes/TriggerNode";
 import MethodInvokeNode from "../CustomNodes/MethodInvokeNode";
 import ResponseNode from "../CustomNodes/ResponseNode";
-import {LibraryAdd} from "@mui/icons-material";
+import {Bolt, LibraryAdd, Reply, Terminal} from "@mui/icons-material";
 import CodeBlockNode from "../CustomNodes/CodeBlockNode";
 
 const nodeTypes = {
@@ -193,10 +193,10 @@ const SubFlowEditor = () => {
             id: 'context-menu', // or any unique ID
             type: 'contextMenuNode',
             data: { label: 'Context Menu Node', items: [
-                {key: 'create-trigger', icon: <LibraryAdd />, text: 'Add Trigger Node', onClick: () => { createTriggerNode(viewportPoint); closeContextMenu(); }},
-                {key: 'create-code-block-node', icon: <LibraryAdd />, text: 'Code Block', onClick: () => { createCodeBlockNode(viewportPoint); closeContextMenu(); }},
+                {key: 'create-trigger', icon: <Bolt />, text: 'Add Trigger Node', onClick: () => { createTriggerNode(viewportPoint); closeContextMenu(); }},
+                {key: 'create-code-block-node', icon: <Terminal />, text: 'Code Block', onClick: () => { createCodeBlockNode(viewportPoint); closeContextMenu(); }},
                 // {key: 'create-method-invoke', icon: <LibraryAdd />, text: 'Invoke Method', onClick: () => { createMethodInvokeNode(viewportPoint); closeContextMenu(); }},
-                {key: 'create-response', icon: <LibraryAdd />, text: 'Add Response Node', onClick: () => { createResponseNode(viewportPoint); closeContextMenu(); }},
+                {key: 'create-response', icon: <Reply />, text: 'Add Response Node', onClick: () => { createResponseNode(viewportPoint); closeContextMenu(); }},
                 ] },
             position: viewportPoint,
             // other node properties

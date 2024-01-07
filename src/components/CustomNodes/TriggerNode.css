@@ -1,20 +1,30 @@
 .trigger-node {
     position: relative;
-    min-width: 200px;
-    min-height: 100px;
+    min-width: 300px;
     border-radius: 5px;
     background: #12111C;
     display: flex;
     flex-direction: column;
     /*align-items: center;*/
     /*justify-content: center;*/
-    padding: 5px;
 }
 
 .trigger-node .react-flow__handle{
-    right: 0;
+    right: -15px;
+    top: 20px;
     width: 10px;
     height: 20px;
     border-radius: 2px;
     background-color: #5245FF;
+}
+
+.trigger-node__body {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #2b2b38;
+    padding: 10px 15px;
+}
+
+.trigger-node__body.minimised {
+    visibility: collapse;
 }

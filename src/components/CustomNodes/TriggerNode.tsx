@@ -1,14 +1,23 @@
-import {Webhook} from "@mui/icons-material";
+import {Bolt, Delete, Webhook} from "@mui/icons-material";
 import {Box, Button, ButtonGroup, Card, MenuItem, Typography} from "@mui/material";
 import './TriggerNode.css';
 import {Handle, Position} from "reactflow";
 import {useState} from "react";
 import ScheduleTriggerSubComponent from "./ScheduleTriggerSubComponent";
 import Select from "@mui/material/Select";
+import FlowNodeHeader from "./FlowNodeHeader";
+import EventTriggerSubComponent from "./EventTriggerSubComponent";
 
 const TriggerNode = ({data}: any) => {
     const [isScheduling, setIsScheduling] = useState<boolean>(data.isScheduling || false);
     const [scheduleConfig, setScheduleConfig] = useState<any>(data.scheduleConfig || {});
+    const [eventConfig, setEventConfig] = useState<any>(data.eventConfig || {});
+    const [isMinimised, setIsMinimised] = useState<boolean>(false);
+    const toggleMinimise = (ev:any) => {
+        ev.stopPropagation();
+        setIsMinimised(!isMinimised);
+    }
+
     const handleChangeIsScheduling = (newIsScheduling: boolean) => {
         if(newIsScheduling !== isScheduling) {
             setIsScheduling(newIsScheduling);
@@ -19,8 +28,14 @@ const TriggerNode = ({data}: any) => {
         setScheduleConfig(newScheduleConfig);
     }
 
-    return <Card className={"trigger-node"}>
-        <Box sx={{padding: '10px'}}>
+    const handleChangeEventConfig = (newEventConfig: any) => {
+        setEventConfig(newEventConfig);
+    }
+
+    return <div className={"trigger-node"}>
+        <FlowNodeHeader isMinimised={isMinimised} onMinimiseClicked={toggleMinimise} icon={<Bolt />} title={"Trigger"} onDeleteClicked={() => { console.log("Delete");} }/>
+        <div className={`trigger-node__body ${isMinimised ? 'minimised' : ''}`}>
+        <Box>
             <Typography variant={"body1"} style={{paddingBottom: '5px'}}>Trigger Type</Typography>
             <ButtonGroup className={"nodrag"} variant={"outlined"} aria-label={"Trigger Type"}>
                 <Button onClick={
@@ -40,17 +55,12 @@ const TriggerNode = ({data}: any) => {
             </ButtonGroup>
         </Box>
         <Box>
-            <Typography variant={"body1"}>Schedule</Typography>
             {isScheduling && <ScheduleTriggerSubComponent scheduleConfig={scheduleConfig} onScheduleConfigUpdate={handleChangeScheduleConfig} />}
+            {!isScheduling && <EventTriggerSubComponent eventConfig={eventConfig} onEventConfigUpdate={handleChangeEventConfig} />}
         </Box>
-        <Box>
-            <Webhook fontSize={"large"}/>
-        </Box>
-        <Box>
-            <Typography variant={"body1"}>Trigger</Typography>
-        </Box>
+        </div>
         <Handle type={"source"} position={Position.Right} />
-    </Card>;
+    </div>;
 }
 
 export default TriggerNode;
