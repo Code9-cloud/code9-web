@@ -5,7 +5,7 @@ import ReactFlow, {
     Controls,
     Background,
     useNodesState,
-    useEdgesState, ReactFlowInstance, Node, Panel,
+    useEdgesState, ReactFlowInstance, Node, Panel, NodeChange,
 } from 'reactflow';
 
 import EntityNode from '../CustomNodes/EntityNode';
@@ -32,7 +32,7 @@ const minimapStyle = {
 const EntitiesEditor = () => {
     const proOptions = { hideAttribution: true };
     const entityEditorRef : React.MutableRefObject<HTMLDivElement | null> = useRef(null);
-    const {application, loadApplication, addEntityToApplication} = React.useContext(GlobalContext);
+    const {application, loadApplication, addEntityToApplication, updateEntityPosition} = React.useContext(GlobalContext);
     const initNodes : Node[] = application?.entities ? Object.values(application.entities).map((entity) => { return { id: 'entity_' + entity.id,
         position: {
             x: entity.position.x,
@@ -159,6 +159,16 @@ const EntitiesEditor = () => {
         setEdges(edges);
     }
 
+    const handleNodesChange = (changes: NodeChange[]) => {
+        changes.map((change) => {
+            if(change.type === 'position' && change.position){
+                let entity_id = change.id.split('_', 2)[1];
+                updateEntityPosition(entity_id, change.position);
+            }
+        });
+        onNodesChange(changes);
+    }
+
     useEffect(() => {
         //TODO: Add case of reload.
         if(application && application.name !== '' && !loaded) {
@@ -166,6 +176,7 @@ const EntitiesEditor = () => {
             resetEdges();
             setLoaded(true);
         }
+        // TODO: This will be triggered on node position updates too
         if(application && loaded) {
             resetEdges();
         }
@@ -189,8 +200,6 @@ const EntitiesEditor = () => {
         // console.log('flow loaded:', reactFlowInstance);
         setReactFlowInstance(reactFlowInstance);
     };
-
-    // TODO: Migrate code to entity editor too & use react flow panels to put add entity button.
 
     // we are using a bit of a shortcut here to adjust the edge type
     // this could also be done with a custom edge for example
@@ -238,7 +247,6 @@ const EntitiesEditor = () => {
     };
 
     const addEntity = (data:any) => {
-        //TODO: Add entity to application state too, but keep in mind not to trigger infinite loop.
         let entity = {
             name: data.entityId,
             id: data.entityId,
@@ -285,7 +293,7 @@ const EntitiesEditor = () => {
                         style={flowStyle}
                             nodes={nodes}
                             edges={edges}
-                            onNodesChange={onNodesChange}
+                            onNodesChange={handleNodesChange}
                             onEdgesChange={onEdgesChange}
                             onNodeClick={onNodeClick}
                             onPaneClick={onPaneClick}

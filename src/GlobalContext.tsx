@@ -24,6 +24,8 @@ type EntityType = {
 type FlowType = {
     name: string;
     id: string;
+    nodes?: any[];
+    edges?: any[];
 }
 
 type ServiceType = {
@@ -65,8 +67,13 @@ type GlobalContextType = {
     addAttributeToEntity: (entityId: string, attribute: AttributeType) => void;
     setAttribute: (entityId: string, attributeId: string, attribute: AttributeType) => void;
     changeEntityName: (entityId: string, name: string) => void;
+    updateEntityPosition: (entityId: string, position: {x: number, y: number}) => void;
     currentServicePath: string[];
     setCurrentServicePath: (path: string[]) => void;
+    addServiceToApplication: (servicePath: string[], newService: ServiceType) => void;
+    removeService: (servicePath: string[]) => void;
+    updateFlow: (flowPath: string[], newFlow: FlowType) => void;
+    removeFlow: (flowPath: string[]) => void;
 };
 
 export const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType);
@@ -320,6 +327,8 @@ const testApplication: ApplicationType = {
         'test': {
             name: 'Test Flow',
             id: 'test',
+            nodes: [],
+            edges: [],
         }
     }
 };
@@ -420,8 +429,66 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
         });
     }
 
+    const updateEntityPosition = (entityId: string, position: {x: number, y: number}) => {
+        setApplication((app) => {
+            if (!app) return app;
+            return {
+                ...app,
+                entities: {
+                    ...app.entities,
+                    [entityId]: {
+                        ...app.entities[entityId],
+                        position: position,
+                    }
+                }
+            };
+        });
+    }
+
+    const addServiceToApplication = (servicePath: string[], newService: ServiceType) => {
+        let applicationCopy = {...application};
+        let service : any = applicationCopy;
+        for (let i = 0; i < servicePath.length - 1; i++) {
+            service = service.services[servicePath[i]];
+        }
+        service.services[servicePath[servicePath.length - 1]] = newService;
+        setApplication(applicationCopy);
+    }
+
+    const removeService = (servicePath: string[]) => {
+        let applicationCopy = {...application};
+        let service : any = applicationCopy;
+        for (let i = 0; i < servicePath.length - 1; i++) {
+            service = service.services[servicePath[i]];
+        }
+        delete service.services[servicePath[servicePath.length - 1]];
+        setApplication(applicationCopy);
+    }
+
+    const updateFlow = (flowPath: string[], newFlow: FlowType) => {
+        let applicationCopy = {...application};
+        let service : any = applicationCopy;
+        for (let i = 0; i < flowPath.length - 1; i++) {
+            service = service.services[flowPath[i]];
+        }
+        service.flows[flowPath[flowPath.length - 1]] = {...newFlow};
+        setApplication(applicationCopy);
+    }
+
+    const removeFlow = (flowPath: string[]) => {
+        let applicationCopy = {...application};
+        let service : any = applicationCopy;
+        for (let i = 0; i < flowPath.length - 1; i++) {
+            service = service.services[flowPath[i]];
+        }
+        delete service.flows[flowPath[flowPath.length - 1]];
+        setApplication(applicationCopy);
+    }
+
     return (
-        <GlobalContext.Provider value={{ user, signIn, signOut, currentSection, setSection, application, setApplication, loadApplication, addEntityToApplication, addAttributeToEntity, setAttribute, changeEntityName, currentServicePath, setCurrentServicePath}}>
+        <GlobalContext.Provider value={{ user, signIn, signOut, currentSection, setSection, application, setApplication, loadApplication, addEntityToApplication, addAttributeToEntity,
+            setAttribute, changeEntityName, updateEntityPosition, currentServicePath, setCurrentServicePath,
+            addServiceToApplication, removeService, updateFlow, removeFlow }}>
             {children}
         </GlobalContext.Provider>
     );

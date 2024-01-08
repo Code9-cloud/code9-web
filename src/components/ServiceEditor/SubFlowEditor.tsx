@@ -29,7 +29,7 @@ const minimapStyle = {
     height: 120,
 };
 
-const SubFlowEditor = () => {
+const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: any, updateFlow: (flow: any) => void}) => {
     const {application, loadApplication} = React.useContext(GlobalContext);
     const proOptions = { hideAttribution: true };
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -42,7 +42,6 @@ const SubFlowEditor = () => {
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
     const minSidebarWidth = 300;
     const maxSidebarWidth = 1200;
-    const [lastActionPosition, setLastActionPosition] = useState({x: 0, y: 0});
 
     const [selectedNode, setSelectedNode] = useState<string | null>(null);
 
@@ -114,6 +113,19 @@ const SubFlowEditor = () => {
             // other node properties
         };
 
+        updateFlow({
+            ...flow,
+            nodes: [
+                ...flow.nodes,
+                {
+                    id: newNode.id,
+                    type: 'trigger',
+                    config: {},
+                    position: viewportPoint,
+                }
+            ]
+        });
+
         setNodes((nds) => {
             let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
             if(idx > -1) {
@@ -150,6 +162,21 @@ const SubFlowEditor = () => {
             // other node properties
         };
 
+        updateFlow({
+            ...flow,
+            nodes: [
+                ...flow.nodes,
+                {
+                    id: newNode.id,
+                    type: 'code',
+                    config: {
+                        code: '',
+                    },
+                    position: viewportPoint,
+                }
+            ]
+        });
+
         setNodes((nds) => {
             let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
             if(idx > -1) {
@@ -168,6 +195,21 @@ const SubFlowEditor = () => {
             // other node properties
         };
 
+        updateFlow({
+            ...flow,
+            nodes: [
+                ...flow.nodes,
+                {
+                    id: newNode.id,
+                    type: 'response',
+                    config: {
+                        statusCode: 200,
+                    },
+                    position: viewportPoint,
+                }
+            ]
+        });
+
         setNodes((nds) => {
             let idx = nds.findIndex((nd) => { return nd.id === 'context-menu'});
             if(idx > -1) {
@@ -175,6 +217,10 @@ const SubFlowEditor = () => {
             }
             return nds.concat(newNode);
         });
+    }
+
+    const handleNodeDelete = (nodeId: string) => {
+
     }
 
     const onPaneContextMenu = (event: any) => {
@@ -187,7 +233,6 @@ const SubFlowEditor = () => {
         }
 
         const viewportPoint = reactFlowInstance.screenToFlowPosition({ x: event.clientX, y: event.clientY});
-        setLastActionPosition(viewportPoint);
 
         const newNode = {
             id: 'context-menu', // or any unique ID

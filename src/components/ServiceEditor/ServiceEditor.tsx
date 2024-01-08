@@ -8,10 +8,14 @@ import ModalCreateService from "./ModalCreateService";
 import ModalCreateFlow from "./ModalCreateFlow";
 
 const ServiceEditor = () => {
-    const { application, setApplication , currentServicePath, setCurrentServicePath } = useContext(GlobalContext);
+    const { application, setApplication , currentServicePath, setCurrentServicePath, updateFlow } = useContext(GlobalContext);
     const [isCreateServiceModalOpen, setIsCreateServiceModalOpen] = useState(false);
     const [isCreateFlowModalOpen, setIsCreateFlowModalOpen] = useState(false);
-    const isRoot = currentServicePath.length === 0;
+    let isRoot = currentServicePath.length === 0;
+    let currObj : any = application;
+    for (let i=0; i < currentServicePath.length - 1; i++){
+        currObj = currObj.services[currentServicePath[i]];
+    }
     const isFlowChecker = () => {
         //TODO: Check doesn't validate cases exhaustively.
         if (isRoot) return false;
@@ -23,6 +27,11 @@ const ServiceEditor = () => {
 
     }
     let isFlow = isFlowChecker();
+    if (isFlow) {
+        currObj = currObj.flows[currentServicePath[currentServicePath.length - 1]];
+    } else {
+        currObj = currObj.services[currentServicePath[currentServicePath.length - 1]];
+    }
 
     const handleCreateServiceModalClose = () => {
         setIsCreateServiceModalOpen(false);
@@ -68,6 +77,10 @@ const ServiceEditor = () => {
         setApplication(applicationCopy);
     }
 
+    const handleUpdateFlow = (data: any) => {
+        updateFlow(currentServicePath, data);
+    }
+
     const navigateToServicePathIndex = (index: number) => () => {
         setCurrentServicePath(currentServicePath.slice(0, index));
     }
@@ -94,7 +107,7 @@ const ServiceEditor = () => {
             <ModalCreateFlow open={isCreateFlowModalOpen} onClose={handleCreateFlowModalClose} onFormSubmit={handleCreateFlow}/>
         </Box>
         <Box style={{width: '100%', height: '100%'}}>
-            {isFlow && <SubFlowEditor />}
+            {isFlow && <SubFlowEditor flowPath={currentServicePath} flow={currObj} updateFlow={handleUpdateFlow}/>}
             {!isFlow && <SubServiceEditor />}
         </Box>
     </div>;
