@@ -108,7 +108,11 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
         const newNode = {
             id: 'node_' + Math.random(),
             type: 'triggerNode',
-            data: { label: 'Trigger Node', selected: false },
+            data: { label: 'Trigger Node', selected: false,
+                onDelete: () => {
+                    onNodeDelete(newNode.id);
+                }
+            },
             position: viewportPoint,
             // other node properties
         };
@@ -153,11 +157,45 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
         });
     }
 
+    const updateCodeInFlow = (nodeId: string, code: string) => {
+        updateFlow({
+            ...flow,
+            nodes: flow.nodes.map((nd: any) => {
+                if(nd.id === nodeId) {
+                    nd.config.code = code;
+                }
+                return nd;
+            })
+        });
+    }
+
+    const deleteNodeInFlow = (nodeId: string) => {
+        //TODO: Delete connections too.
+        updateFlow({
+            ...flow,
+            nodes: flow.nodes.filter((nd: any) => {
+                return nd.id !== nodeId;
+            })
+        });
+    }
+
+    const onNodeDelete = (nodeId: string) => {
+        setNodes((nds) => {
+            return nds.filter((nd) => { return nd.id !== nodeId });
+        });
+        deleteNodeInFlow(nodeId);
+    }
+
     const createCodeBlockNode = (viewportPoint: XYPosition) => {
         const newNode = {
             id: 'node_' + Math.random(),
             type: 'codeBlockNode',
-            data: { label: 'Code Block Node', selected: false },
+            data: { label: 'Code Block Node', selected: false,
+                onCodeUpdate: (code: string) => { updateCodeInFlow(newNode.id, code); },
+                onDelete: () => {
+                    onNodeDelete(newNode.id);
+                },
+            },
             position: viewportPoint,
             // other node properties
         };
@@ -190,7 +228,11 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
         const newNode = {
             id: 'node_' + Math.random(),
             type: 'responseNode',
-            data: { label: 'Response Node', selected: false },
+            data: { label: 'Response Node', selected: false,
+                onDelete: () => {
+                    onNodeDelete(newNode.id);
+                },
+            },
             position: viewportPoint,
             // other node properties
         };

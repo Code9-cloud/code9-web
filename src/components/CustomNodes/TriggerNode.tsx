@@ -13,6 +13,7 @@ const TriggerNode = ({data}: any) => {
     const [scheduleConfig, setScheduleConfig] = useState<any>(data.scheduleConfig || {});
     const [eventConfig, setEventConfig] = useState<any>(data.eventConfig || {});
     const [isMinimised, setIsMinimised] = useState<boolean>(false);
+    const onDelete = data.onDelete || (() => {});
     const toggleMinimise = (ev:any) => {
         ev.stopPropagation();
         setIsMinimised(!isMinimised);
@@ -33,7 +34,7 @@ const TriggerNode = ({data}: any) => {
     }
 
     return <div className={"trigger-node"}>
-        <FlowNodeHeader isMinimised={isMinimised} onMinimiseClicked={toggleMinimise} icon={<Bolt />} title={"Trigger"} onDeleteClicked={() => { console.log("Delete");} }/>
+        <FlowNodeHeader isMinimised={isMinimised} onMinimiseClicked={toggleMinimise} icon={<Bolt />} title={"Trigger"} onDeleteClicked={onDelete}/>
         <div className={`trigger-node__body ${isMinimised ? 'minimised' : ''}`}>
         <Box>
             <Typography variant={"body1"} style={{paddingBottom: '5px'}}>Trigger Type</Typography>

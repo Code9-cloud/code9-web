@@ -3,7 +3,7 @@ import './ContextMenuNode.css';
 function ContextMenuNode({data}: any) {
     // Assume items in data of form {key:string, icon: React.Node, text: string, onClick: function}
     return (
-        <div className="context-menu-node">
+        <div className="context-menu-node nodrag nopan">
             <div className="context-menu-header">
                 Select Action
             </div>

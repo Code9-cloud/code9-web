@@ -9,12 +9,13 @@ import {InputLabel} from "@mui/material";
 
 const ResponseNode = ({data}: any) => {
     const [isMinimised, setIsMinimised] = React.useState<boolean>(false);
+    const onDelete = data.onDelete || (() => {});
     const toggleMinimise = (ev:any) => {
         ev.stopPropagation();
         setIsMinimised(!isMinimised);
     }
     return <div className={"response-node"}>
-        <FlowNodeHeader isMinimised={isMinimised} onMinimiseClicked={toggleMinimise} icon={<Reply />} title={"Send Response"} onDeleteClicked={() => { console.log("Delete");} }/>
+        <FlowNodeHeader isMinimised={isMinimised} onMinimiseClicked={toggleMinimise} icon={<Reply />} title={"Send Response"} onDeleteClicked={onDelete}/>
         <div className={`response-node__body ${isMinimised ? 'minimised' : ''}`}>
             <InputLabel id="status-code-label">Status Code</InputLabel>
             <Select className={"nopan nodrag"} labelId={"status-code-label"} fullWidth
