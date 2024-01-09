@@ -1,11 +1,9 @@
 import './CodeBlockNode.css';
-import {Box, Typography} from "@mui/material";
 import React from "react";
 import {Handle, NodeResizeControl, Position} from "reactflow";
 import {Code, SouthEast, Terminal} from "@mui/icons-material";
 import FlowNodeHeader from "./FlowNodeHeader";
 import CodeBlockEditor from "../CodeEditor/CodeBlockEditor";
-import {Resizable, ResizableBox} from 'react-resizable';
 
 const CodeBlockNode = ({data}: any) => {
     const [isMinimised, setIsMinimised] = React.useState<boolean>(false);

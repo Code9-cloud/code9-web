@@ -1,6 +1,6 @@
 import ReactFlow, {
     addEdge,
-    Background,
+    Background, Connection,
     Controls,
     MiniMap,
     ReactFlowInstance,
@@ -16,6 +16,7 @@ import MethodInvokeNode from "../CustomNodes/MethodInvokeNode";
 import ResponseNode from "../CustomNodes/ResponseNode";
 import {Bolt, LibraryAdd, Reply, Terminal} from "@mui/icons-material";
 import CodeBlockNode from "../CustomNodes/CodeBlockNode";
+import EdgeWithDeleteIcon from "../CustomEdges/EdgeWithDeleteIcon";
 
 const nodeTypes = {
     triggerNode: TriggerNode,
@@ -25,11 +26,15 @@ const nodeTypes = {
     contextMenuNode: ContextMenuNode,
 };
 
+const edgeTypes = {
+    deletable: EdgeWithDeleteIcon,
+};
+
 const minimapStyle = {
     height: 120,
 };
 
-const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: any, updateFlow: (flow: any) => void}) => {
+const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (flow: any) => void}) => {
     const {application, loadApplication} = React.useContext(GlobalContext);
     const proOptions = { hideAttribution: true };
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -44,6 +49,24 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
     const maxSidebarWidth = 1200;
 
     const [selectedNode, setSelectedNode] = useState<string | null>(null);
+    // let flow : any = application;
+    // for (let i=0; i < flowPath.length - 1; i++){
+    //     flow = flow.services[flowPath[i]];
+    // }
+    // flow = flow.flows[flowPath[flowPath.length - 1]];
+
+    const getFlow = () => {
+        let flow : any = application;
+        for (let i=0; i < flowPath.length - 1; i++){
+            flow = flow.services[flowPath[i]];
+        }
+        flow = flow.flows[flowPath[flowPath.length - 1]];
+        return flow;
+    }
+
+    const handleUpdateFlow = (newFlow: any) => {
+        updateFlow(newFlow);
+    }
 
     const onNodeClick = (event: any, node: any) => {
         if(node.type === 'triggerNode' || node.type === 'methodInvokeNode' || node.type === 'responseNode') {
@@ -117,7 +140,9 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
             // other node properties
         };
 
-        updateFlow({
+        let flow = getFlow();
+
+        handleUpdateFlow({
             ...flow,
             nodes: [
                 ...flow.nodes,
@@ -158,7 +183,8 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
     }
 
     const updateCodeInFlow = (nodeId: string, code: string) => {
-        updateFlow({
+        let flow = getFlow();
+        handleUpdateFlow({
             ...flow,
             nodes: flow.nodes.map((nd: any) => {
                 if(nd.id === nodeId) {
@@ -170,8 +196,8 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
     }
 
     const deleteNodeInFlow = (nodeId: string) => {
-        //TODO: Delete connections too.
-        updateFlow({
+        let flow = getFlow();
+        handleUpdateFlow({
             ...flow,
             nodes: flow.nodes.filter((nd: any) => {
                 return nd.id !== nodeId;
@@ -181,6 +207,17 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
 
     const onNodeDelete = (nodeId: string) => {
         setNodes((nds) => {
+            setEdges((eds) => {
+                eds.map((ed) => {
+                    if(ed.source === nodeId || ed.target === nodeId) {
+                        deleteEdgeInFlow(ed.id);
+                    }
+                    return ed;
+                });
+                return eds.filter((ed) => {
+                    return ed.source !== nodeId && ed.target !== nodeId;
+                });
+            });
             return nds.filter((nd) => { return nd.id !== nodeId });
         });
         deleteNodeInFlow(nodeId);
@@ -200,7 +237,9 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
             // other node properties
         };
 
-        updateFlow({
+        let flow = getFlow();
+
+        handleUpdateFlow({
             ...flow,
             nodes: [
                 ...flow.nodes,
@@ -237,7 +276,8 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
             // other node properties
         };
 
-        updateFlow({
+        let flow = getFlow();
+        handleUpdateFlow({
             ...flow,
             nodes: [
                 ...flow.nodes,
@@ -261,8 +301,51 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
         });
     }
 
-    const handleNodeDelete = (nodeId: string) => {
+    const handleOnEdgesChange = (changes: any) : void => {
+        onEdgesChange(changes);
+    }
 
+    const handleOnNodesChange = (changes: any) : void => {
+        //TODO: Reflex move in application state
+        onNodesChange(changes);
+    }
+
+    const deleteEdgeInFlow = (edgeId: string) => {
+        let flow = getFlow();
+        handleUpdateFlow({
+            ...flow,
+            edges: flow.edges.filter((ed: any) => {
+                return ed.id !== edgeId;
+            })
+        });
+    }
+
+    const handleOnEdgeDelete = (edgeId: string) => {
+        deleteEdgeInFlow(edgeId);
+        setEdges((eds) => {
+            return eds.filter((ed) => { return ed.id !== edgeId });
+        });
+    }
+
+    const handleOnConnect = (params: Connection) : void => {
+        let id : string = 'edge_' + Math.random();
+        let flow = getFlow();
+        handleUpdateFlow({
+            ...flow,
+            edges: [
+                ...flow.edges,
+                {
+                    id: id,
+                    source: params.source,
+                    target: params.target,
+                }
+            ]
+        });
+        setEdges((eds) => addEdge({...params,
+            id: id,
+            type: 'deletable', data: {
+            onDelete: handleOnEdgeDelete
+            }}, eds));
     }
 
     const onPaneContextMenu = (event: any) => {
@@ -310,15 +393,16 @@ const SubFlowEditor = ({flowPath, flow, updateFlow}:{flowPath: string[], flow: a
                             style={flowStyle}
                             nodes={nodes}
                             edges={edges}
-                            onNodesChange={onNodesChange}
-                            onEdgesChange={onEdgesChange}
+                            onNodesChange={handleOnNodesChange}
+                            onEdgesChange={handleOnEdgesChange}
                             onNodeClick={onNodeClick}
                             onPaneClick={onPaneClick}
-                            onConnect={onConnect}
+                            onConnect={handleOnConnect}
                             onInit={onInit}
                             onPaneContextMenu={onPaneContextMenu}
                             proOptions={proOptions}
                             nodeTypes={nodeTypes}
+                            edgeTypes={edgeTypes}
                             maxZoom={1.5}
                             defaultViewport={{x:0, y:0, zoom: 1}}
                         >

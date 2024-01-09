@@ -107,7 +107,7 @@ const ServiceEditor = () => {
             <ModalCreateFlow open={isCreateFlowModalOpen} onClose={handleCreateFlowModalClose} onFormSubmit={handleCreateFlow}/>
         </Box>
         <Box style={{width: '100%', height: '100%'}}>
-            {isFlow && <SubFlowEditor flowPath={currentServicePath} flow={currObj} updateFlow={handleUpdateFlow}/>}
+            {isFlow && <SubFlowEditor flowPath={currentServicePath} updateFlow={handleUpdateFlow}/>}
             {!isFlow && <SubServiceEditor />}
         </Box>
     </div>;
