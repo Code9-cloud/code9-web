@@ -2,7 +2,7 @@ import ReactFlow, {
     addEdge,
     Background, Connection,
     Controls,
-    MiniMap,
+    MiniMap, NodeChange,
     ReactFlowInstance,
     useEdgesState,
     useNodesState, XYPosition
@@ -132,6 +132,7 @@ const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (
             id: 'node_' + Math.random(),
             type: 'triggerNode',
             data: { label: 'Trigger Node', selected: false,
+                onConfigUpdate: (config: any) => { updateTriggerConfigInFlow(newNode.id, config); },
                 onDelete: () => {
                     onNodeDelete(newNode.id);
                 }
@@ -189,6 +190,32 @@ const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (
             nodes: flow.nodes.map((nd: any) => {
                 if(nd.id === nodeId) {
                     nd.config.code = code;
+                }
+                return nd;
+            })
+        });
+    }
+
+    const updateTriggerConfigInFlow = (nodeId: string, config: any) => {
+        let flow = getFlow();
+        handleUpdateFlow({
+            ...flow,
+            nodes: flow.nodes.map((nd: any) => {
+                if(nd.id === nodeId) {
+                    nd.config = config;
+                }
+                return nd;
+            })
+        });
+    }
+
+    const updateResponseConfigInFlow = (nodeId: string, config: any) => {
+        let flow = getFlow();
+        handleUpdateFlow({
+            ...flow,
+            nodes: flow.nodes.map((nd: any) => {
+                if(nd.id === nodeId) {
+                    nd.config = config;
                 }
                 return nd;
             })
@@ -268,6 +295,7 @@ const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (
             id: 'node_' + Math.random(),
             type: 'responseNode',
             data: { label: 'Response Node', selected: false,
+                onConfigUpdate: (config: any) => { updateResponseConfigInFlow(newNode.id, config); },
                 onDelete: () => {
                     onNodeDelete(newNode.id);
                 },
@@ -305,8 +333,22 @@ const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (
         onEdgesChange(changes);
     }
 
-    const handleOnNodesChange = (changes: any) : void => {
+    const handleOnNodesChange = (changes: NodeChange[]) : void => {
         //TODO: Reflex move in application state
+        changes.map((change) => {
+            if(change.type === 'position' && change.position){
+                let flow = getFlow();
+                handleUpdateFlow({
+                    ...flow,
+                    nodes: flow.nodes.map((nd: any) => {
+                        if(nd.id === change.id) {
+                            nd.position = change.position;
+                        }
+                        return nd;
+                    })
+                });
+            }
+        });
         onNodesChange(changes);
     }
 

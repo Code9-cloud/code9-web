@@ -14,6 +14,7 @@ const TriggerNode = ({data}: any) => {
     const [eventConfig, setEventConfig] = useState<any>(data.eventConfig || {});
     const [isMinimised, setIsMinimised] = useState<boolean>(false);
     const onDelete = data.onDelete || (() => {});
+    const onConfigUpdate = data.onConfigUpdate || ((_:any) => {});
     const toggleMinimise = (ev:any) => {
         ev.stopPropagation();
         setIsMinimised(!isMinimised);
@@ -26,16 +27,18 @@ const TriggerNode = ({data}: any) => {
     }
 
     const handleChangeScheduleConfig = (newScheduleConfig: any) => {
+        onConfigUpdate({scheduleConfig: newScheduleConfig});
         setScheduleConfig(newScheduleConfig);
     }
 
     const handleChangeEventConfig = (newEventConfig: any) => {
+        onConfigUpdate({eventConfig: newEventConfig});
         setEventConfig(newEventConfig);
     }
 
     return <div className={"trigger-node"}>
         <FlowNodeHeader isMinimised={isMinimised} onMinimiseClicked={toggleMinimise} icon={<Bolt />} title={"Trigger"} onDeleteClicked={onDelete}/>
-        <div className={`trigger-node__body ${isMinimised ? 'minimised' : ''}`}>
+        <div className={`trigger-node__body ${isMinimised ? 'minimised' : ''}`} onClick={(ev) => {ev.stopPropagation();}}>
         <Box>
             <Typography variant={"body1"} style={{paddingBottom: '5px'}}>Trigger Type</Typography>
             <ButtonGroup className={"nodrag"} variant={"outlined"} aria-label={"Trigger Type"}>
