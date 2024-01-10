@@ -20,19 +20,30 @@ const TriggerNode = ({data}: any) => {
         setIsMinimised(!isMinimised);
     }
 
+    const defaultScheduleConfig : any = {
+        frequency: 'day',
+    }
+
+    const defaultEventConfig : any = {
+        path: '',
+    }
+
     const handleChangeIsScheduling = (newIsScheduling: boolean) => {
         if(newIsScheduling !== isScheduling) {
+            onConfigUpdate({isScheduling: newIsScheduling, scheduleConfig: defaultScheduleConfig, eventConfig: defaultEventConfig});
+            setScheduleConfig(defaultScheduleConfig);
+            setEventConfig(defaultEventConfig);
             setIsScheduling(newIsScheduling);
         }
     }
 
     const handleChangeScheduleConfig = (newScheduleConfig: any) => {
-        onConfigUpdate({scheduleConfig: newScheduleConfig});
+        onConfigUpdate({isScheduling: true, scheduleConfig: newScheduleConfig, eventConfig: defaultEventConfig});
         setScheduleConfig(newScheduleConfig);
     }
 
     const handleChangeEventConfig = (newEventConfig: any) => {
-        onConfigUpdate({eventConfig: newEventConfig});
+        onConfigUpdate({isScheduling: false, scheduleConfig: defaultScheduleConfig, eventConfig: newEventConfig});
         setEventConfig(newEventConfig);
     }
 
@@ -42,19 +53,19 @@ const TriggerNode = ({data}: any) => {
         <Box>
             <Typography variant={"body1"} style={{paddingBottom: '5px'}}>Trigger Type</Typography>
             <ButtonGroup className={"nodrag"} variant={"outlined"} aria-label={"Trigger Type"}>
-                <Button onClick={
-                    (ev) => {
-                        ev.stopPropagation();
-                        handleChangeIsScheduling(true);}}
-                    >
-                    Frequency Based
-                </Button>
-                <Button onClick={
+                <Button variant={isScheduling ? "outlined" : "contained"} onClick={
                     (ev) => {
                         ev.stopPropagation();
                         handleChangeIsScheduling(false);}}
                     >
                     Event Based
+                </Button>
+                <Button variant={isScheduling ? "contained" : "outlined"} onClick={
+                    (ev) => {
+                        ev.stopPropagation();
+                        handleChangeIsScheduling(true);}}
+                >
+                    Frequency Based
                 </Button>
             </ButtonGroup>
         </Box>

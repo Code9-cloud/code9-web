@@ -13,6 +13,7 @@ import {ReactComponent as Google} from './vectors/google.svg';
 import { Link } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SidePanel from '../SignUp/SidePanel';
+import {GoogleLogin} from "@react-oauth/google";
 
 const SignIn: React.FC = () => {
     const { signIn } = useContext(GlobalContext);
@@ -30,6 +31,14 @@ const SignIn: React.FC = () => {
     const handleBlur = () => {
         setIsFocused(true);
     };
+
+    const onGoogleSuccess = (res: any) => {
+        console.log(res);
+    }
+
+    const onGoogleFailure = () => {
+        console.log("Error");
+    }
 
 
     return (
@@ -103,14 +112,15 @@ const SignIn: React.FC = () => {
                         <div style={{textAlign: "center"}}>----------- Or continue with -----------</div>
                         <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                             <div>
-                                <Button 
-                                data-client_id="107155738547-2hblmveiemkave337b3eiglpc3pgd622.apps.googleusercontent.com"
+                                {/*<Button */}
+                                {/*data-client_id="107155738547-2hblmveiemkave337b3eiglpc3pgd622.apps.googleusercontent.com"*/}
                                 
-                                variant="contained" 
-                                startIcon={<SvgIcon component={Google} />}
-                                style={{backgroundColor: "#22212D", color: "white", border: "2px solid #374151", padding: "5px 30px", textTransform: "none"}}>
-                                   Login with Google
-                                </Button>
+                                {/*variant="contained" */}
+                                {/*startIcon={<SvgIcon component={Google} />}*/}
+                                {/*style={{backgroundColor: "#22212D", color: "white", border: "2px solid #374151", padding: "5px 30px", textTransform: "none"}}>*/}
+                                {/*   Login with Google*/}
+                                {/*</Button>*/}
+                                <GoogleLogin onSuccess={onGoogleSuccess} onError={onGoogleFailure} />
                             </div>
                             <div>
                                 <Button 

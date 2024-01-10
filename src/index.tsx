@@ -13,12 +13,14 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import {GoogleOAuthProvider} from "@react-oauth/google";
 
 const root = ReactDOM.createRoot(
 
   document.getElementById('root') as HTMLElement
 );
 root.render(
+<GoogleOAuthProvider clientId="1008031957867-34j8078v2e2t82379imsseac84jd0tg4.apps.googleusercontent.com">
   <React.StrictMode>
     <GlobalProvider>
       <ThemeProvider theme={theme}>
@@ -30,6 +32,7 @@ root.render(
       </ThemeProvider>
     </GlobalProvider>
   </React.StrictMode>
+</GoogleOAuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

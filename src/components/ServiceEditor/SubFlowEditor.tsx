@@ -132,6 +132,13 @@ const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (
             id: 'node_' + Math.random(),
             type: 'triggerNode',
             data: { label: 'Trigger Node', selected: false,
+                isScheduling: false,
+                eventConfig: {
+                    path: '',
+                },
+                scheduleConfig: {
+                    frequency: 'day',
+                },
                 onConfigUpdate: (config: any) => { updateTriggerConfigInFlow(newNode.id, config); },
                 onDelete: () => {
                     onNodeDelete(newNode.id);
@@ -150,7 +157,15 @@ const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (
                 {
                     id: newNode.id,
                     type: 'trigger',
-                    config: {},
+                    config: {
+                        isScheduling: false,
+                        eventConfig: {
+                            path: '',
+                        },
+                        scheduleConfig: {
+                            frequency: 'day',
+                        },
+                    },
                     position: viewportPoint,
                 }
             ]
