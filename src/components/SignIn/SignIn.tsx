@@ -15,9 +15,14 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import SidePanel from '../SignUp/SidePanel';
 import {GoogleCredentialResponse, GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
+import defaultConfig from "../../config/default";
 
 const SignIn: React.FC = () => {
     const { signIn } = useContext(GlobalContext);
+
+    const getUserDetailsFromGid = async (gid: string) => {
+        let response = await fetch(defaultConfig.apiUrl + 'google_user/' + gid);
+    }
 
     const handleSignIn = () => {
         signIn({ name: 'User', avatar: '/path/to/avatar.jpg' });
@@ -36,7 +41,11 @@ const SignIn: React.FC = () => {
     const onGoogleSuccess = (res: GoogleCredentialResponse) => {
         if(res.credential) {
             const decoded = jwtDecode(res.credential);
-            console.log(decoded);
+            if(decoded.sub) {
+                getUserDetailsFromGid(decoded.sub).then(() => {
+                    console.log("Success");
+                });
+            }
         }
     }
 
