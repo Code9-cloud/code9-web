@@ -327,8 +327,59 @@ const testApplication: ApplicationType = {
         'test': {
             name: 'Test Flow',
             id: 'test',
-            nodes: [],
-            edges: [],
+            nodes: [
+                {
+                    "id": "node_1",
+                    "type": "trigger",
+                    "config": {
+                        "isScheduling": false,
+                        "scheduleConfig": {
+                            "frequency": "day"
+                        },
+                        "eventConfig": {
+                            "path": "/greet"
+                        }
+                    },
+                    "position": {
+                        "x": 314,
+                        "y": 152
+                    }
+                },
+                {
+                    "id": "node_2",
+                    "type": "code",
+                    "config": {
+                        "code": "console.log(\"Greetings !\");\ncontext.response = \"Hello User \" + context.request.username;"
+                    },
+                    "position": {
+                        "x": 786,
+                        "y": 170
+                    }
+                },
+                {
+                    "id": "node_3",
+                    "type": "response",
+                    "config": {
+                        "statusCode": 200
+                    },
+                    "position": {
+                        "x": 1599,
+                        "y": 189
+                    }
+                }
+            ],
+            edges: [
+                {
+                    "id": "edge_1",
+                    "source": "node_1",
+                    "target": "node_2"
+                },
+                {
+                    "id": "edge_2",
+                    "source": "node_2",
+                    "target": "node_3"
+                }
+            ],
         }
     }
 };

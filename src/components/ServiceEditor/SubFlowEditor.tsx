@@ -37,23 +37,6 @@ const minimapStyle = {
 const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (flow: any) => void}) => {
     const {application, loadApplication} = React.useContext(GlobalContext);
     const proOptions = { hideAttribution: true };
-    const [nodes, setNodes, onNodesChange] = useNodesState([]);
-    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
-
-    const onConnect = useCallback((params: any) => setEdges((eds) => addEdge(params, eds)), []);
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-    const [sidebarWidth, setSidebarWidth] = useState(300);
-    const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
-    const minSidebarWidth = 300;
-    const maxSidebarWidth = 1200;
-
-    const [selectedNode, setSelectedNode] = useState<string | null>(null);
-    // let flow : any = application;
-    // for (let i=0; i < flowPath.length - 1; i++){
-    //     flow = flow.services[flowPath[i]];
-    // }
-    // flow = flow.flows[flowPath[flowPath.length - 1]];
 
     const getFlow = () => {
         let flow : any = application;
@@ -63,6 +46,87 @@ const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (
         flow = flow.flows[flowPath[flowPath.length - 1]];
         return flow;
     }
+
+    const loadNodes = () : any[] => {
+        let flow = getFlow();
+        return Object.values(flow.nodes).map((nd: any) => {
+            let currNode : any = {
+                id: nd.id,
+                position: nd.position,
+            };
+            if(nd.type === 'trigger') {
+                currNode.type = 'triggerNode';
+                currNode.data = { label: 'Trigger Node', selected: false,
+                    isScheduling: nd.config.isScheduling,
+                    eventConfig: {
+                        path: nd.config.eventConfig.path,
+                    },
+                    scheduleConfig: {
+                        frequency: nd.config.scheduleConfig.frequency,
+                    },
+                    onConfigUpdate: (config: any) => { updateTriggerConfigInFlow(currNode.id, config); },
+                    onDelete: () => {
+                        onNodeDelete(currNode.id);
+                    }
+                };
+            } else if (nd.type === 'code') {
+                currNode.type = 'codeBlockNode';
+                currNode.data = { label: 'Code Block Node', selected: false,
+                    code: nd.config.code,
+                    onCodeUpdate: (code: string) => { updateCodeInFlow(currNode.id, code); },
+                    onDelete: () => {
+                        onNodeDelete(currNode.id);
+                    },
+                };
+            } else if (nd.type === 'response') {
+                currNode.type = 'responseNode';
+                currNode.data = { label: 'Response Node', selected: false,
+                    statusCode: nd.config.statusCode,
+                    onConfigUpdate: (config: any) => { updateResponseConfigInFlow(currNode.id, config); },
+                    onDelete: () => {
+                        onNodeDelete(currNode.id);
+                    },
+                };
+            }
+            return currNode;
+        });
+    }
+
+    const loadEdges = () : any[] => {
+        let flow = getFlow();
+        return Object.values(flow.edges).map((ed: any) => {
+            return {
+                id: ed.id,
+                source: ed.source,
+                target: ed.target,
+                type: 'deletable',
+                data: {
+                    onDelete: (edgeId:string) => { handleOnEdgeDelete(edgeId); }
+                }
+            };
+        });
+    }
+
+    const initNodes = loadNodes();
+    const [nodes, setNodes, onNodesChange] = useNodesState(initNodes);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(loadEdges());
+    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+
+    const onConnect = useCallback((params: any) => setEdges((eds) => addEdge(params, eds)), []);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const [sidebarWidth, setSidebarWidth] = useState(300);
+    const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
+    const minSidebarWidth = 300;
+    const maxSidebarWidth = 1200;
+
+
+
+    const [selectedNode, setSelectedNode] = useState<string | null>(null);
+    // let flow : any = application;
+    // for (let i=0; i < flowPath.length - 1; i++){
+    //     flow = flow.services[flowPath[i]];
+    // }
+    // flow = flow.flows[flowPath[flowPath.length - 1]];
 
     const handleUpdateFlow = (newFlow: any) => {
         updateFlow(newFlow);
@@ -270,6 +334,7 @@ const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (
             id: 'node_' + Math.random(),
             type: 'codeBlockNode',
             data: { label: 'Code Block Node', selected: false,
+                code: '',
                 onCodeUpdate: (code: string) => { updateCodeInFlow(newNode.id, code); },
                 onDelete: () => {
                     onNodeDelete(newNode.id);
@@ -310,6 +375,7 @@ const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (
             id: 'node_' + Math.random(),
             type: 'responseNode',
             data: { label: 'Response Node', selected: false,
+                statusCode: 200,
                 onConfigUpdate: (config: any) => { updateResponseConfigInFlow(newNode.id, config); },
                 onDelete: () => {
                     onNodeDelete(newNode.id);
@@ -401,7 +467,7 @@ const SubFlowEditor = ({flowPath, updateFlow}:{flowPath: string[], updateFlow: (
         setEdges((eds) => addEdge({...params,
             id: id,
             type: 'deletable', data: {
-            onDelete: handleOnEdgeDelete
+            onDelete: (edgeId: string) => { handleOnEdgeDelete(edgeId); }
             }}, eds));
     }
 
