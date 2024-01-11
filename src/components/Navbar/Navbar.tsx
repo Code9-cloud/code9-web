@@ -2,8 +2,6 @@ import React from 'react';
 import {
     AppBar,
     Toolbar,
-    Typography,
-    Switch,
     Button,
     Menu,
     MenuItem,
@@ -12,13 +10,10 @@ import {
 } from '@mui/material';
 
 import logo from '../../Code9logo_white.png';
-import CustomTab from "../CustomTab/CustomTab";
-import CustomTabs from "../CustomTab/CustomTabs";
-import {Reply } from "@mui/icons-material";
 import {GlobalContext} from "../../GlobalContext";
 
 const Navbar = () => {
-    const {signOut} = React.useContext(GlobalContext);
+    const {user, signOut, application} = React.useContext(GlobalContext);
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -38,6 +33,18 @@ const Navbar = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleSave = async () => {
+        // Post application to backend
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let response = await fetch(process.env.REACT_APP_API_URL + '/application/'+user?.id, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({ application: application }),
+        });
+        handleClose();
+    }
 
     return (
         <AppBar position="static" color="transparent">
@@ -75,6 +82,7 @@ const Navbar = () => {
                         onClose={handleClose}
                     >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
+                        <MenuItem onClick={handleSave}>Save</MenuItem>
                         <MenuItem onClick={handleSignout}>Logout</MenuItem>
                         {/* More items */}
                     </Menu>

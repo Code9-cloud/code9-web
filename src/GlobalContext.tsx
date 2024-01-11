@@ -50,6 +50,7 @@ type ApplicationType = {
 };
 
 type UserType = {
+    id: string;
     name: string;
     avatar: string;
 } | null;

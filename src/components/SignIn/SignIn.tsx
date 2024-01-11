@@ -9,23 +9,44 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Checkbox from '@mui/material/Checkbox';
 import { GitHub } from '@mui/icons-material';
-import {ReactComponent as Google} from './vectors/google.svg';
 import { Link } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SidePanel from '../SignUp/SidePanel';
 import {GoogleCredentialResponse, GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
-import defaultConfig from "../../config/default";
 
 const SignIn: React.FC = () => {
-    const { signIn } = useContext(GlobalContext);
+    const { signIn, setApplication } = useContext(GlobalContext);
 
-    const getUserDetailsFromGid = async (gid: string) => {
-        let response = await fetch(defaultConfig.apiUrl + 'google_user/' + gid);
+    const getUserDetailsFromGid = async (gid: string, name: string, email: string) => {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let response = await fetch(process.env.REACT_APP_API_URL + '/sign-in/google_user/', {
+            body:JSON.stringify({
+                gid: gid,
+                name: name,
+                email: email,
+            }),
+            method: 'POST',
+            headers: headers,
+        });
+        if (response.status === 200) {
+            let data = await response.json();
+            // Fetch Application Data
+            let appResponse = await fetch(process.env.REACT_APP_API_URL + '/application/byUserId/' + data.id, {
+                method: 'GET',
+                headers: headers,
+            });
+            let applicationData = await appResponse.json();
+            if(applicationData.application) {
+                setApplication(applicationData.application);
+            }
+            signIn({ id: data.id, name: data.name, avatar: '' });
+        }
     }
 
     const handleSignIn = () => {
-        signIn({ name: 'User', avatar: '/path/to/avatar.jpg' });
+        signIn({ id: '65a0465719f53527b82c3a73', name: 'User', avatar: '/path/to/avatar.jpg' });
     };
 
     const [isFocused, setIsFocused] = useState(true);
@@ -40,9 +61,9 @@ const SignIn: React.FC = () => {
 
     const onGoogleSuccess = (res: GoogleCredentialResponse) => {
         if(res.credential) {
-            const decoded = jwtDecode(res.credential);
-            if(decoded.sub) {
-                getUserDetailsFromGid(decoded.sub).then(() => {
+            const decoded = jwtDecode<any>(res.credential);
+            if(decoded.sub && decoded.email && decoded.name) {
+                getUserDetailsFromGid(decoded.sub, decoded.name, decoded.email).then(() => {
                     console.log("Success");
                 });
             }

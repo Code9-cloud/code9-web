@@ -12,10 +12,6 @@ const ServiceEditor = () => {
     const [isCreateServiceModalOpen, setIsCreateServiceModalOpen] = useState(false);
     const [isCreateFlowModalOpen, setIsCreateFlowModalOpen] = useState(false);
     let isRoot = currentServicePath.length === 0;
-    let currObj : any = application;
-    for (let i=0; i < currentServicePath.length - 1; i++){
-        currObj = currObj.services[currentServicePath[i]];
-    }
     const isFlowChecker = () => {
         //TODO: Check doesn't validate cases exhaustively.
         if (isRoot) return false;
@@ -27,11 +23,6 @@ const ServiceEditor = () => {
 
     }
     let isFlow = isFlowChecker();
-    if (isFlow) {
-        currObj = currObj.flows[currentServicePath[currentServicePath.length - 1]];
-    } else {
-        currObj = currObj.services[currentServicePath[currentServicePath.length - 1]];
-    }
 
     const handleCreateServiceModalClose = () => {
         setIsCreateServiceModalOpen(false);

@@ -18,12 +18,6 @@ import SidePanel from "./SidePanel";
 
 const SignUp: React.FC  = () => {
 
-    const { signIn } = useContext(GlobalContext);
-
-    const handleSignIn = () => {
-        signIn({ name: 'User', avatar: '/path/to/avatar.jpg' });
-    };
-
     const [isFocused, setIsFocused] = useState(true);
 
     const handleFocus = () => {
