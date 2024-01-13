@@ -14,7 +14,7 @@ import ContextMenuNode from "../CustomNodes/ContextMenuNode";
 import TriggerNode from "../CustomNodes/TriggerNode";
 import MethodInvokeNode from "../CustomNodes/MethodInvokeNode";
 import ResponseNode from "../CustomNodes/ResponseNode";
-import {Bolt, LibraryAdd, Reply, Terminal} from "@mui/icons-material";
+import {Bolt, Reply, Terminal} from "@mui/icons-material";
 import CodeBlockNode from "../CustomNodes/CodeBlockNode";
 import EdgeWithDeleteIcon from "../CustomEdges/EdgeWithDeleteIcon";
 

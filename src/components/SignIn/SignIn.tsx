@@ -16,7 +16,7 @@ import {GoogleCredentialResponse, GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
 
 const SignIn: React.FC = () => {
-    const { signIn, setApplication } = useContext(GlobalContext);
+    const { signIn, setApplication, setApplicationId } = useContext(GlobalContext);
 
     const getUserDetailsFromGid = async (gid: string, name: string, email: string) => {
         let headers = new Headers();
@@ -40,6 +40,9 @@ const SignIn: React.FC = () => {
             let applicationData = await appResponse.json();
             if(applicationData.application) {
                 setApplication(applicationData.application);
+            }
+            if(applicationData.application_id) {
+                setApplicationId(applicationData.application_id);
             }
             signIn({ id: data.id, name: data.name, avatar: '' });
         }

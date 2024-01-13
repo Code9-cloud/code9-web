@@ -75,6 +75,8 @@ type GlobalContextType = {
     removeService: (servicePath: string[]) => void;
     updateFlow: (flowPath: string[], newFlow: FlowType) => void;
     removeFlow: (flowPath: string[]) => void;
+    application_id: string;
+    setApplicationId: (id: string) => void;
 };
 
 export const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType);
@@ -397,6 +399,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     const [application, setApplication] = useState<ApplicationType>(testApplication);
     const [currentSection, setCurrentSection] = useState('Entities');
     const [currentServicePath, setCurrentServicePath] = useState<string[]>([]);
+    const [application_id, setApplicationId] = useState<string>('');
 
     const signIn = (userData: UserType) => {
         setUser(userData);
@@ -540,7 +543,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     return (
         <GlobalContext.Provider value={{ user, signIn, signOut, currentSection, setSection, application, setApplication, loadApplication, addEntityToApplication, addAttributeToEntity,
             setAttribute, changeEntityName, updateEntityPosition, currentServicePath, setCurrentServicePath,
-            addServiceToApplication, removeService, updateFlow, removeFlow }}>
+            addServiceToApplication, removeService, updateFlow, removeFlow, application_id, setApplicationId }}>
             {children}
         </GlobalContext.Provider>
     );

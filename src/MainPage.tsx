@@ -7,6 +7,7 @@ import ComingSoon from "./components/ComingSoon/ComingSoon";
 import './App.css';
 import ServiceEditor from "./components/ServiceEditor/ServiceEditor";
 import DatabaseConfig from "./components/DatabaseConfig/DatabaseConfig";
+import Deployment from "./components/Deployment/Deployment";
 
 
 const MainPage = () => {
@@ -21,7 +22,7 @@ const MainPage = () => {
                     {currentSection === 'Entities' && <EntitiesEditor />}
                     {currentSection === 'Services' && <ServiceEditor />}
                     {currentSection === 'Database' && <DatabaseConfig />}
-                    {currentSection === 'Deploy' && <ComingSoon />}
+                    {currentSection === 'Deploy' && <Deployment />}
                 </div>
             </div>
         </div>
