@@ -64,6 +64,8 @@ const ServiceEditor = () => {
         service.flows[data.flowId] = {
             name: data.flowName,
             id: data.flowId,
+            nodes: [],
+            edges: [],
         };
         setApplication(applicationCopy);
     }
